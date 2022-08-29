@@ -2,9 +2,9 @@ import {
   CommonOptions,
   defaults as commonDefaults,
   withCommonDefaults,
-} from "../../common-options";
-import { Contract, ContractBuilder } from "../../contract";
-import { printContract } from "../../print";
+} from "../../../utils/common-options";
+import { Contract, ContractBuilder } from "../../../utils/contract";
+import { printContract } from "../../../utils/print";
 import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
@@ -13,7 +13,7 @@ import { addERC1155Mintable } from "./feature/add-erc1155-mintable";
 import { addERC1155Pausable } from "./feature/add-erc1155-pausable";
 import { addERC1155Supply } from "./feature/add-erc1155-supply";
 import { addERC1155Base } from "./metadata/add-erc1155-base";
-import { addERC1155URI } from "./metadata/add-erc721-uri";
+import { addERC1155URI } from "./metadata/add-erc1155-uri";
 
 export interface ERC1155Options extends CommonOptions {
   name: string;

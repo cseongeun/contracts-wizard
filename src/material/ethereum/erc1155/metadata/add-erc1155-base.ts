@@ -1,7 +1,7 @@
-import { supportsInterface } from "../../../common-functions";
-import type { ContractBuilder } from "../../../contract";
+import { supportsInterface } from "../../../../utils/common-functions";
+import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../sourcecode";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addERC1155Base(c: ContractBuilder, uri: string) {
   c.addParent(

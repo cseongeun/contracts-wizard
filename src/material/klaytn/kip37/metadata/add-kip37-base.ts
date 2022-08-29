@@ -1,7 +1,7 @@
-import { supportsInterface } from "../../../common-functions";
-import type { ContractBuilder } from "../../../contract";
+import { supportsInterface } from "../../../../utils/common-functions";
+import type { ContractBuilder } from "../../../../utils/contract";
+import { pathPrefix } from "../../../../utils/sourcecode";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../sourcecode";
 
 export function addKIP37Base(c: ContractBuilder, uri: string) {
   c.addParent(

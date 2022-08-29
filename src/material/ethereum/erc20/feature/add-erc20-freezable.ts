@@ -1,10 +1,10 @@
-import type { ContractBuilder, BaseFunction } from "../../../contract";
+import type { ContractBuilder, BaseFunction } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { pathPrefix } from "../../../sourcecode";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addERC20Freezable(c: ContractBuilder, access: Access) {
   c.addParent({

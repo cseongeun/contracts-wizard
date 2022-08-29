@@ -1,4 +1,4 @@
-import type { ContractBuilder } from "../../../contract";
+import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import {
   Access,

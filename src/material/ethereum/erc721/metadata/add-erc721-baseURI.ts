@@ -1,4 +1,4 @@
-import type { ContractBuilder } from "../../../contract";
+import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 
 export function addERC721BaseURI(c: ContractBuilder, baseUri: string) {

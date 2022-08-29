@@ -1,21 +1,24 @@
-import path from 'path';
+import path from "path";
 
-import type { Contract } from './contract';
+import type { Contract } from "./contract";
 
 const upgradeableName = (n: string) => {
-  if (n === 'Initializable') {
+  if (n === "Initializable") {
     return n;
   } else {
-    return n.replace(/(Upgradeable)?(?=\.|$)/, 'Upgradeable');
+    return n.replace(/(Upgradeable)?(?=\.|$)/, "Upgradeable");
   }
-}
+};
 
 const upgradeableImport = (p: string) => {
   const { dir, ext, name } = path.parse(p);
   // Use path.posix to get forward slashes
   return path.posix.format({
     ext,
-    dir: dir.replace(/^@openzeppelin\/contracts/, '@openzeppelin/contracts-upgradeable'),
+    dir: dir.replace(
+      /^@openzeppelin\/contracts/,
+      "@openzeppelin/contracts-upgradeable"
+    ),
     name: upgradeableName(name),
   });
 };
@@ -32,14 +35,14 @@ export interface Helpers extends Required<Options> {
 
 export function withHelpers(contract: Contract, opts: Options = {}): Helpers {
   const upgradeable = contract.upgradeable;
-  const transformName = (n: string) => upgradeable ? upgradeableName(n) : n;
+  const transformName = (n: string) => (upgradeable ? upgradeableName(n) : n);
   return {
     upgradeable,
     transformName,
-    transformImport: p1 => {
+    transformImport: (p1) => {
       const p2 = upgradeable ? upgradeableImport(p1) : p1;
       return opts.transformImport?.(p2) ?? p2;
     },
-    transformVariable: v => v.replace(/[A-Z]\w*(?=\.|$)/, transformName),
+    transformVariable: (v) => v.replace(/[A-Z]\w*(?=\.|$)/, transformName),
   };
 }

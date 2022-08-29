@@ -1,4 +1,4 @@
-import type { BaseFunction } from "../material/contract";
+import type { BaseFunction } from "./contract";
 
 type ImplicitNameFunction = Omit<BaseFunction, "name">;
 

@@ -1,6 +1,6 @@
-import type { ContractBuilder } from "../../../contract";
+import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../sourcecode";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addKIP17URIStorage(c: ContractBuilder) {
   c.addParent({

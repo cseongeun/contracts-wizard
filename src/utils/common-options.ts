@@ -1,5 +1,8 @@
-import type { Access } from "./common/access/set-access-control";
-import { defaults as infoDefaults, Info } from "./common/information/set-info";
+import type { Access } from "../material/common/access/set-access-control";
+import {
+  defaults as infoDefaults,
+  Info,
+} from "../material/common/information/set-info";
 
 export const defaults: Required<CommonOptions> = {
   access: false,

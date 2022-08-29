@@ -2,9 +2,9 @@ import {
   CommonOptions,
   defaults as commonDefaults,
   withCommonDefaults,
-} from "../../common-options";
-import { Contract, ContractBuilder } from "../../contract";
-import { printContract } from "../../print";
+} from "../../../utils/common-options";
+import { Contract, ContractBuilder } from "../../../utils/contract";
+import { printContract } from "../../../utils/print";
 import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";

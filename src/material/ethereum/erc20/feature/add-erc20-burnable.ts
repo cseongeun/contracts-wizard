@@ -1,5 +1,5 @@
-import type { ContractBuilder } from "../../../contract";
-import { pathPrefix } from "../../../sourcecode";
+import type { ContractBuilder } from "../../../../utils/contract";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addERC20Burnable(c: ContractBuilder) {
   c.addParent({

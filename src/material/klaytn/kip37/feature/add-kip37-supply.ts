@@ -1,6 +1,6 @@
-import type { ContractBuilder } from "../../../contract";
+import type { ContractBuilder } from "../../../../utils/contract";
+import { pathPrefix } from "../../../../utils/sourcecode";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../sourcecode";
 
 export function addKIP37Supply(c: ContractBuilder) {
   c.addParent({

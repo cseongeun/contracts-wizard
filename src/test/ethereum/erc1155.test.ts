@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
 import { buildGeneric, GenericOptions } from "../../material/build-generic";
-import { printContract } from "../../material/print";
+import { printContract } from "../../utils/print";
 
 describe("ERC20", () => {
   test("{kind, name, symbol}", async () => {

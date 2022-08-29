@@ -1,4 +1,4 @@
-import type { ContractBuilder } from "../../contract";
+import type { ContractBuilder } from "../../../utils/contract";
 
 export const TAG_SECURITY_CONTACT = `@custom:security-contact`;
 

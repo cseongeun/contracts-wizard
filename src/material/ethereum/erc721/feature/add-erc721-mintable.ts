@@ -1,9 +1,9 @@
-import type { ContractBuilder } from "../../../contract";
+import type { ContractBuilder } from "../../../../utils/contract";
 import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { pathPrefix } from "../../../sourcecode";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addERC721Mintable(
   c: ContractBuilder,

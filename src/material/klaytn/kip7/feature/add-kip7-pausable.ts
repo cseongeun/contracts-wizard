@@ -1,10 +1,10 @@
-import type { ContractBuilder, BaseFunction } from "../../../contract";
+import type { ContractBuilder, BaseFunction } from "../../../../utils/contract";
 import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../sourcecode";
+import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addKIP7Pausable(
   c: ContractBuilder,

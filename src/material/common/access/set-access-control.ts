@@ -1,6 +1,6 @@
-import type { ContractBuilder, BaseFunction } from "../../contract";
-import { supportsInterface } from "../../common-functions";
-import { pathPrefix } from "../../sourcecode";
+import type { ContractBuilder, BaseFunction } from "../../../utils/contract";
+import { supportsInterface } from "../../../utils/common-functions";
+import { pathPrefix } from "../../../utils/sourcecode";
 
 export const accessOptions = [false, "ownable", "roles"] as const;
 
