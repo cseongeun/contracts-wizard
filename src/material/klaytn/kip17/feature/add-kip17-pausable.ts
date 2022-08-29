@@ -6,14 +6,14 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC721Pausable(
+export function addKIP17Pausable(
   c: ContractBuilder,
   access: Access,
   pausableFns: BaseFunction[]
 ) {
   c.addParent({
-    name: "ERC721Pausable",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721Pausable.sol`,
+    name: "KIP17Pausable",
+    path: `${pathPrefix}/klaytn/kip17/features/KIP17Pausable.sol`,
   });
 
   for (const fn of pausableFns) {

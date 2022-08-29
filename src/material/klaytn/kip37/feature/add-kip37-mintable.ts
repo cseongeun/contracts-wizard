@@ -5,7 +5,7 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 
-export function addERC1155Mintable(c: ContractBuilder, access: Access) {
+export function addKIP37Mintable(c: ContractBuilder, access: Access) {
   requireAccessControl(c, functions.mint, access, "MINTER");
   requireAccessControl(c, functions.mintBatch, access, "MINTER");
   c.addFunctionCode("_mint(account, id, amount, data);", functions.mint);

@@ -5,7 +5,7 @@ import {
 } from "../../../common/access/set-access-control";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC721Mintable(
+export function addKIP17Mintable(
   c: ContractBuilder,
   access: Access,
   incremental = false,

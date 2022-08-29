@@ -1,8 +1,9 @@
 import { buildERC20, ERC20Options } from "./ethereum/erc20/erc20";
 import { buildERC721, ERC721Options } from "./ethereum/erc721/erc721";
 import { buildERC1155, ERC1155Options } from "./ethereum/erc1155/erc1155";
-import { KIP7Options } from "./klaytn/kip7/kip7";
-import { KIP17Options } from "./klaytn/kip17/kip17";
+import { buildKIP7, KIP7Options } from "./klaytn/kip7/kip7";
+import { buildKIP17, KIP17Options } from "./klaytn/kip17/kip17";
+import { buildKIP37, KIP37Options } from "./klaytn/kip37/kip37";
 
 export interface KindedOptions {
   ERC20: { kind: "ERC20" } & ERC20Options;
@@ -10,7 +11,7 @@ export interface KindedOptions {
   ERC1155: { kind: "ERC1155" } & ERC1155Options;
   KIP7: { kind: "KIP7" } & KIP7Options;
   KIP17: { kind: "KIP17" } & KIP17Options;
-  KIP37: { kind: "KIP37" } & ERC1155Options;
+  KIP37: { kind: "KIP37" } & KIP37Options;
 }
 
 export type GenericOptions = KindedOptions[keyof KindedOptions];
@@ -19,6 +20,9 @@ export type KIND = {
   ERC20: "ERC20";
   ERC721: "ERC721";
   ERC1155: "ERC1155";
+  KIP7: "KIP7";
+  KIP17: "KIP17";
+  KIP37: "KIP37";
 };
 
 export function buildGeneric(opts: GenericOptions) {
@@ -31,6 +35,15 @@ export function buildGeneric(opts: GenericOptions) {
 
     case "ERC1155":
       return buildERC1155(opts);
+
+    case "KIP7":
+      return buildKIP7(opts);
+
+    case "KIP17":
+      return buildKIP17(opts);
+
+    case "KIP37":
+      return buildKIP37(opts);
 
     default:
       const _: never = opts;

@@ -3,17 +3,17 @@ import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC1155Base(c: ContractBuilder, uri: string) {
+export function addKIP37Base(c: ContractBuilder, uri: string) {
   c.addParent(
     {
-      name: "ERC1155",
-      path: `${pathPrefix}/ethereum/erc1155/ERC1155.sol`,
+      name: "KIP37",
+      path: `${pathPrefix}/klaytn/kip37/KIP37.sol`,
     },
     [uri]
   );
 
-  c.addOverride("ERC1155", functions._beforeTokenTransfer);
-  c.addOverride("ERC1155", supportsInterface);
+  c.addOverride("KIP37", functions._beforeTokenTransfer);
+  c.addOverride("KIP37", supportsInterface);
 }
 
 const functions = defineFunctions({

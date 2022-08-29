@@ -2,14 +2,14 @@ import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC721URIStorage(c: ContractBuilder) {
+export function addKIP17URIStorage(c: ContractBuilder) {
   c.addParent({
-    name: "ERC721URIStorage",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721URIStorage.sol`,
+    name: "KIP17URIStorage",
+    path: `${pathPrefix}/klaytn/kip17/features/KIP17URIStorage.sol`,
   });
 
-  c.addOverride("ERC721URIStorage", functions._burn);
-  c.addOverride("ERC721URIStorage", functions.tokenURI);
+  c.addOverride("KIP17URIStorage", functions._burn);
+  c.addOverride("KIP17URIStorage", functions.tokenURI);
 }
 
 const functions = defineFunctions({

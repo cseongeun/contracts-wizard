@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/cseongeun/standard-contracts-wizard"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "scripts": {
     "test": "jest",

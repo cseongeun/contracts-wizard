@@ -2,10 +2,10 @@ import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC1155Supply(c: ContractBuilder) {
+export function addKIP37Supply(c: ContractBuilder) {
   c.addParent({
-    name: "ERC1155Supply",
-    path: `${pathPrefix}/ethereum/erc1155/features/ERC1155Supply.sol`,
+    name: "KIP37Supply",
+    path: `${pathPrefix}/klaytn/kip37/features/KIP37Supply.sol`,
   });
   c.addOverride("ERC1155Supply", functions._beforeTokenTransfer);
 }

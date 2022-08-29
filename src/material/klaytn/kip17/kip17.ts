@@ -8,13 +8,13 @@ import { printContract } from "../../print";
 import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
-import { addERC721Burnable } from "./feature/add-kip17-burnable";
-import { addERC721Enumerable } from "./feature/add-kip17-enumerable";
-import { addERC721Mintable } from "./feature/add-kip17-mintable";
-import { addERC721Pausable } from "./feature/add-kip17-pausable";
-import { addERC721URIStorage } from "./feature/add-kip17-uriStorage";
-import { addERC721Base } from "./metadata/add-kip17-base";
-import { addERC721BaseURI } from "./metadata/add-kip17-baseURI";
+import { addKIP17Burnable } from "./feature/add-kip17-burnable";
+import { addKIP17Enumerable } from "./feature/add-kip17-enumerable";
+import { addKIP17Mintable } from "./feature/add-kip17-mintable";
+import { addKIP17Pausable } from "./feature/add-kip17-pausable";
+import { addKIP17URIStorage } from "./feature/add-kip17-uriStorage";
+import { addKIP17Base } from "./metadata/add-kip17-base";
+import { addKIP17BaseURI } from "./metadata/add-kip17-baseURI";
 
 export interface KIP17Options extends CommonOptions {
   // metadata
@@ -60,45 +60,45 @@ function withDefaults(opts: KIP17Options): Required<KIP17Options> {
   };
 }
 
-export function printERC721(opts: KIP17Options = defaults): string {
-  return printContract(buildERC721(opts));
+export function printKIP17(opts: KIP17Options = defaults): string {
+  return printContract(buildKIP17(opts));
 }
 
 export function isAccessControlRequired(opts: Partial<KIP17Options>): boolean {
   return (opts.mintable || opts.pausable) as boolean;
 }
 
-export function buildERC721(opts: KIP17Options): Contract {
+export function buildKIP17(opts: KIP17Options): Contract {
   const allOpts = withDefaults(opts);
 
   const c = new ContractBuilder(allOpts.name);
 
   const { access, info } = allOpts;
 
-  addERC721Base(c, allOpts.name, allOpts.symbol);
+  addKIP17Base(c, allOpts.name, allOpts.symbol);
 
   if (allOpts.baseUri) {
-    addERC721BaseURI(c, allOpts.baseUri);
+    addKIP17BaseURI(c, allOpts.baseUri);
   }
 
   if (allOpts.enumerable) {
-    addERC721Enumerable(c);
+    addKIP17Enumerable(c);
   }
 
   if (allOpts.uriStorage) {
-    addERC721URIStorage(c);
+    addKIP17URIStorage(c);
   }
 
   if (allOpts.pausable) {
-    addERC721Pausable(c, access, [functions._beforeTokenTransfer]);
+    addKIP17Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
   if (allOpts.burnable) {
-    addERC721Burnable(c);
+    addKIP17Burnable(c);
   }
 
   if (allOpts.mintable) {
-    addERC721Mintable(c, access, allOpts.autoIncrementId, allOpts.uriStorage);
+    addKIP17Mintable(c, access, allOpts.autoIncrementId, allOpts.uriStorage);
   }
 
   setAccessControl(c, access);

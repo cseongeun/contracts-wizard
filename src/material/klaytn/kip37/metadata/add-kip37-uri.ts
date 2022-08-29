@@ -5,7 +5,7 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 
-export function addERC1155URI(c: ContractBuilder, access: Access) {
+export function addKIP37URI(c: ContractBuilder, access: Access) {
   requireAccessControl(c, functions.setURI, access, "URI_SETTER");
   c.addFunctionCode("_setURI(newuri);", functions.setURI);
 }

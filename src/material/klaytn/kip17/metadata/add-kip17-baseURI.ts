@@ -1,8 +1,8 @@
 import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 
-export function addERC721BaseURI(c: ContractBuilder, baseUri: string) {
-  c.addOverride("ERC721", functions._baseURI);
+export function addKIP17BaseURI(c: ContractBuilder, baseUri: string) {
+  c.addOverride("KIP17", functions._baseURI);
   c.setFunctionBody([`return ${JSON.stringify(baseUri)};`], functions._baseURI);
 }
 

@@ -3,14 +3,14 @@ import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC721Enumerable(c: ContractBuilder) {
+export function addKIP17Enumerable(c: ContractBuilder) {
   c.addParent({
-    name: "ERC721Enumerable",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721Enumerable.sol`,
+    name: "KIP17Enumerable",
+    path: `${pathPrefix}/klaytn/kip17/features/KIP17Enumerable.sol`,
   });
 
-  c.addOverride("ERC721Enumerable", functions._beforeTokenTransfer);
-  c.addOverride("ERC721Enumerable", supportsInterface);
+  c.addOverride("KIP17Enumerable", functions._beforeTokenTransfer);
+  c.addOverride("KIP17Enumerable", supportsInterface);
 }
 
 const functions = defineFunctions({

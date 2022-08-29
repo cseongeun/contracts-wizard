@@ -1,9 +1,9 @@
 import type { ContractBuilder } from "../../../contract";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC1155Burnable(c: ContractBuilder) {
+export function addKIP37Burnable(c: ContractBuilder) {
   c.addParent({
-    name: "ERC1155Burnable",
-    path: `${pathPrefix}/ethereum/erc1155/features/ERC1155Burnable.sol`,
+    name: "KIP37Burnable",
+    path: `${pathPrefix}/klaytn/kip37/features/KIP37Burnable.sol`,
   });
 }
