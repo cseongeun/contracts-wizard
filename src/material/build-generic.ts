@@ -16,7 +16,7 @@ export interface KindedOptions {
 
 export type GenericOptions = KindedOptions[keyof KindedOptions];
 
-export type KIND = {
+export type BuildKinds = {
   ERC20: "ERC20";
   ERC721: "ERC721";
   ERC1155: "ERC1155";

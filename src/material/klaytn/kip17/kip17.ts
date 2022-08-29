@@ -17,31 +17,31 @@ import { addKIP17Base } from "./metadata/add-kip17-base";
 import { addKIP17BaseURI } from "./metadata/add-kip17-baseURI";
 
 export interface KIP17Options extends CommonOptions {
-  // metadata
   name: string;
   symbol: string;
   baseUri?: string;
-  // feature
-  enumerable?: boolean;
-  uriStorage?: boolean;
-  burnable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
-  autoIncrementId?: boolean;
+  features: {
+    enumerable?: boolean;
+    uriStorage?: boolean;
+    burnable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    autoIncrementId?: boolean;
+  };
 }
 
 export const defaults: Required<KIP17Options> = {
   name: "MyToken",
   symbol: "MTK",
   baseUri: "",
-
-  enumerable: false,
-  uriStorage: false,
-  burnable: false,
-  pausable: false,
-  mintable: false,
-  autoIncrementId: false,
-
+  features: {
+    enumerable: false,
+    uriStorage: false,
+    burnable: false,
+    pausable: false,
+    mintable: false,
+    autoIncrementId: false,
+  },
   access: commonDefaults.access,
   info: commonDefaults.info,
 } as const;
@@ -51,12 +51,15 @@ function withDefaults(opts: KIP17Options): Required<KIP17Options> {
     ...opts,
     ...withCommonDefaults(opts),
     baseUri: opts.baseUri ?? defaults.baseUri,
-    enumerable: opts.enumerable ?? defaults.enumerable,
-    uriStorage: opts.uriStorage ?? defaults.uriStorage,
-    burnable: opts.burnable ?? defaults.burnable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
-    autoIncrementId: opts.autoIncrementId ?? defaults.autoIncrementId,
+    features: {
+      enumerable: opts.features.enumerable ?? defaults.features.enumerable,
+      uriStorage: opts.features.uriStorage ?? defaults.features.uriStorage,
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+      autoIncrementId:
+        opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
+    },
   };
 }
 
@@ -65,7 +68,7 @@ export function printKIP17(opts: KIP17Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<KIP17Options>): boolean {
-  return (opts.mintable || opts.pausable) as boolean;
+  return (opts.features?.mintable || opts.features?.pausable) as boolean;
 }
 
 export function buildKIP17(opts: KIP17Options): Contract {
@@ -81,24 +84,29 @@ export function buildKIP17(opts: KIP17Options): Contract {
     addKIP17BaseURI(c, allOpts.baseUri);
   }
 
-  if (allOpts.enumerable) {
+  if (allOpts.features.enumerable) {
     addKIP17Enumerable(c);
   }
 
-  if (allOpts.uriStorage) {
+  if (allOpts.features.uriStorage) {
     addKIP17URIStorage(c);
   }
 
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addKIP17Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addKIP17Burnable(c);
   }
 
-  if (allOpts.mintable) {
-    addKIP17Mintable(c, access, allOpts.autoIncrementId, allOpts.uriStorage);
+  if (allOpts.features.mintable) {
+    addKIP17Mintable(
+      c,
+      access,
+      allOpts.features.autoIncrementId,
+      allOpts.features.uriStorage
+    );
   }
 
   setAccessControl(c, access);

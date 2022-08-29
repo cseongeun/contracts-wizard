@@ -2,7 +2,7 @@ import type { ContractBuilder } from "../../../../utils/contract";
 
 export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
-export function addKIP7Premintable(c: ContractBuilder, amount: string) {
+export function addKIP7Premint(c: ContractBuilder, amount: string) {
   const m = amount.match(premintPattern);
   if (m) {
     const integer = m[1]?.replace(/^0+/, "") ?? "";

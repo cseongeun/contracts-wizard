@@ -11,11 +11,8 @@ import { setInformation } from "../../common/information/set-info";
 import { addERC20Burnable } from "./feature/add-erc20-burnable";
 import { addERC20Mintable } from "./feature/add-erc20-mintable";
 import { addERC20Pausable } from "./feature/add-erc20-pausable";
-import { addERC20Permit } from "./feature/add-erc20-permit";
-import { addERC20Snapshot } from "./feature/add-erc20-snapshot";
-import { addERC20Vote } from "./feature/add-erc20-vote";
 import { addERC20Base } from "./metadata/add-erc20-base";
-import { addERC20Premintable } from "./metadata/add-erc20-premintable";
+import { addERC20Premint } from "./metadata/add-erc20-premint";
 import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
 
@@ -25,14 +22,13 @@ export interface ERC20Options extends CommonOptions {
   symbol: string;
   premint?: string;
   // feature
-  burnable?: boolean;
-  freezable?: boolean;
-  lockable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
-  snapshot?: boolean;
-  vote?: boolean;
-  permit?: boolean;
+  features: {
+    burnable?: boolean;
+    freezable?: boolean;
+    lockable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+  };
 }
 
 export const defaults: Required<ERC20Options> = {
@@ -42,15 +38,13 @@ export const defaults: Required<ERC20Options> = {
   premint: "0",
 
   // feature
-  burnable: false,
-  freezable: false,
-  lockable: false,
-  pausable: false,
-  mintable: false,
-  permit: false,
-  snapshot: false,
-  vote: false,
-
+  features: {
+    burnable: false,
+    freezable: false,
+    lockable: false,
+    pausable: false,
+    mintable: false,
+  },
   // access
   access: commonDefaults.access,
   // info
@@ -62,14 +56,13 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
     ...opts,
     ...withCommonDefaults(opts),
     premint: opts.premint || defaults.premint,
-    burnable: opts.burnable ?? defaults.burnable,
-    freezable: opts.freezable ?? defaults.freezable,
-    lockable: opts.lockable ?? defaults.lockable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
-    permit: opts.permit ?? defaults.permit,
-    snapshot: opts.snapshot ?? defaults.snapshot,
-    vote: opts.vote ?? defaults.vote,
+    features: {
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
+      lockable: opts.features.lockable ?? defaults.features.lockable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+    },
   };
 }
 
@@ -78,11 +71,10 @@ export function printERC20(opts: ERC20Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<ERC20Options>): boolean {
-  return (opts.mintable ||
-    opts.pausable ||
-    opts.snapshot ||
-    opts.freezable ||
-    opts.lockable) as boolean;
+  return (opts.features?.mintable ||
+    opts.features?.pausable ||
+    opts.features?.freezable ||
+    opts.features?.lockable) as boolean;
 }
 
 export function buildERC20(opts: ERC20Options): Contract {
@@ -95,40 +87,27 @@ export function buildERC20(opts: ERC20Options): Contract {
   addERC20Base(c, allOpts.name, allOpts.symbol);
 
   if (allOpts.premint) {
-    addERC20Premintable(c, allOpts.premint);
+    addERC20Premint(c, allOpts.premint);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addERC20Burnable(c);
   }
 
-  if (allOpts.freezable) {
+  if (allOpts.features.freezable) {
     addERC20Freezable(c, access);
   }
 
-  if (allOpts.snapshot) {
-    addERC20Snapshot(c, access);
-  }
-
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addERC20Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.mintable) {
+  if (allOpts.features.mintable) {
     addERC20Mintable(c, access);
   }
 
-  if (allOpts.lockable) {
+  if (allOpts.features.lockable) {
     addERC20Lockable(c, access);
-  }
-
-  // // Note: Votes requires Permit
-  if (allOpts.permit || allOpts.vote) {
-    addERC20Permit(c, allOpts.name);
-  }
-
-  if (allOpts.vote) {
-    addERC20Vote(c);
   }
 
   setAccessControl(c, access);

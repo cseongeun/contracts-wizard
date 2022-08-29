@@ -22,26 +22,28 @@ export interface ERC721Options extends CommonOptions {
   symbol: string;
   baseUri?: string;
   // feature
-  enumerable?: boolean;
-  uriStorage?: boolean;
-  burnable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
-  autoIncrementId?: boolean;
+  features: {
+    enumerable?: boolean;
+    uriStorage?: boolean;
+    burnable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    autoIncrementId?: boolean;
+  };
 }
 
 export const defaults: Required<ERC721Options> = {
   name: "MyToken",
   symbol: "MTK",
   baseUri: "",
-
-  enumerable: false,
-  uriStorage: false,
-  burnable: false,
-  pausable: false,
-  mintable: false,
-  autoIncrementId: false,
-
+  features: {
+    enumerable: false,
+    uriStorage: false,
+    burnable: false,
+    pausable: false,
+    mintable: false,
+    autoIncrementId: false,
+  },
   access: commonDefaults.access,
   info: commonDefaults.info,
 } as const;
@@ -51,12 +53,15 @@ function withDefaults(opts: ERC721Options): Required<ERC721Options> {
     ...opts,
     ...withCommonDefaults(opts),
     baseUri: opts.baseUri ?? defaults.baseUri,
-    enumerable: opts.enumerable ?? defaults.enumerable,
-    uriStorage: opts.uriStorage ?? defaults.uriStorage,
-    burnable: opts.burnable ?? defaults.burnable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
-    autoIncrementId: opts.autoIncrementId ?? defaults.autoIncrementId,
+    features: {
+      enumerable: opts.features.enumerable ?? defaults.features.enumerable,
+      uriStorage: opts.features.uriStorage ?? defaults.features.uriStorage,
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+      autoIncrementId:
+        opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
+    },
   };
 }
 
@@ -65,7 +70,7 @@ export function printERC721(opts: ERC721Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<ERC721Options>): boolean {
-  return (opts.mintable || opts.pausable) as boolean;
+  return (opts.features?.mintable || opts.features?.pausable) as boolean;
 }
 
 export function buildERC721(opts: ERC721Options): Contract {
@@ -81,24 +86,29 @@ export function buildERC721(opts: ERC721Options): Contract {
     addERC721BaseURI(c, allOpts.baseUri);
   }
 
-  if (allOpts.enumerable) {
+  if (allOpts.features.enumerable) {
     addERC721Enumerable(c);
   }
 
-  if (allOpts.uriStorage) {
+  if (allOpts.features.uriStorage) {
     addERC721URIStorage(c);
   }
 
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addERC721Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addERC721Burnable(c);
   }
 
-  if (allOpts.mintable) {
-    addERC721Mintable(c, access, allOpts.autoIncrementId, allOpts.uriStorage);
+  if (allOpts.features.mintable) {
+    addERC721Mintable(
+      c,
+      access,
+      allOpts.features.autoIncrementId,
+      allOpts.features.uriStorage
+    );
   }
 
   setAccessControl(c, access);

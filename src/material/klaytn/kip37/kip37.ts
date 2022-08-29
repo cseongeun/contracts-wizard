@@ -18,23 +18,25 @@ import { addKIP37URI } from "./metadata/add-kip37-uri";
 export interface KIP37Options extends CommonOptions {
   name: string;
   uri: string;
-
-  burnable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
-  supply?: boolean;
-  updatableUri?: boolean;
+  features: {
+    burnable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    supply?: boolean;
+    updatableUri?: boolean;
+  };
 }
 
 export const defaults: Required<KIP37Options> = {
   name: "MyToken",
   uri: "",
-
-  burnable: false,
-  pausable: false,
-  mintable: false,
-  supply: false,
-  updatableUri: true,
+  features: {
+    burnable: false,
+    pausable: false,
+    mintable: false,
+    supply: false,
+    updatableUri: true,
+  },
   access: false,
   info: commonDefaults.info,
 } as const;
@@ -43,11 +45,14 @@ function withDefaults(opts: KIP37Options): Required<KIP37Options> {
   return {
     ...opts,
     ...withCommonDefaults(opts),
-    burnable: opts.burnable ?? defaults.burnable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
-    supply: opts.supply ?? defaults.supply,
-    updatableUri: opts.updatableUri ?? defaults.updatableUri,
+    features: {
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+      supply: opts.features.supply ?? defaults.features.supply,
+      updatableUri:
+        opts.features.updatableUri ?? defaults.features.updatableUri,
+    },
   };
 }
 
@@ -56,9 +61,9 @@ export function printKIP37(opts: KIP37Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<KIP37Options>): boolean {
-  return (opts.mintable ||
-    opts.pausable ||
-    opts.updatableUri !== false) as boolean;
+  return (opts.features?.mintable ||
+    opts.features?.pausable ||
+    opts.features?.updatableUri !== false) as boolean;
 }
 
 export function buildKIP37(opts: KIP37Options): Contract {
@@ -70,23 +75,23 @@ export function buildKIP37(opts: KIP37Options): Contract {
 
   addKIP37Base(c, allOpts.uri);
 
-  if (allOpts.updatableUri) {
+  if (allOpts.features.updatableUri) {
     addKIP37URI(c, access);
   }
 
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addKIP37Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addKIP37Burnable(c);
   }
 
-  if (allOpts.mintable) {
+  if (allOpts.features.mintable) {
     addKIP37Mintable(c, access);
   }
 
-  if (allOpts.supply) {
+  if (allOpts.features.supply) {
     addKIP37Supply(c);
   }
 

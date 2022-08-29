@@ -12,39 +12,35 @@ import { addKIP7Burnable } from "./feature/add-kip7-burnable";
 import { addKIP7Mintable } from "./feature/add-kip7-mintable";
 import { addKIP7Pausable } from "./feature/add-kip7-pausable";
 import { addKIP7Base } from "./metadata/add-kip7-base";
-import { addKIP7Premintable } from "./metadata/add-kip7-premintable";
+import { addKIP7Premint } from "./metadata/add-kip7-premint";
 import { addKIP7Lockable } from "./feature/add-kip7-lockable";
 import { addKIP7Freezable } from "./feature/add-kip7-freezable";
 
 export interface KIP7Options extends CommonOptions {
-  // metadata
   name: string;
   symbol: string;
   premint?: string;
-  // feature
-  burnable?: boolean;
-  freezable?: boolean;
-  lockable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
+  features: {
+    burnable?: boolean;
+    freezable?: boolean;
+    lockable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+  };
 }
 
 export const defaults: Required<KIP7Options> = {
-  // metadata
   name: "MyToken",
   symbol: "MTK",
   premint: "0",
-
-  // feature
-  burnable: false,
-  freezable: false,
-  lockable: false,
-  pausable: false,
-  mintable: false,
-
-  // access
+  features: {
+    burnable: false,
+    freezable: false,
+    lockable: false,
+    pausable: false,
+    mintable: false,
+  },
   access: commonDefaults.access,
-  // info
   info: commonDefaults.info,
 } as const;
 
@@ -53,11 +49,13 @@ function withDefaults(opts: KIP7Options): Required<KIP7Options> {
     ...opts,
     ...withCommonDefaults(opts),
     premint: opts.premint || defaults.premint,
-    burnable: opts.burnable ?? defaults.burnable,
-    freezable: opts.freezable ?? defaults.freezable,
-    lockable: opts.lockable ?? defaults.lockable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
+    features: {
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
+      lockable: opts.features.lockable ?? defaults.features.lockable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+    },
   };
 }
 
@@ -66,10 +64,10 @@ export function printKIP7(opts: KIP7Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<KIP7Options>): boolean {
-  return (opts.mintable ||
-    opts.pausable ||
-    opts.freezable ||
-    opts.lockable) as boolean;
+  return (opts.features?.mintable ||
+    opts.features?.pausable ||
+    opts.features?.freezable ||
+    opts.features?.lockable) as boolean;
 }
 
 export function buildKIP7(opts: KIP7Options): Contract {
@@ -82,26 +80,26 @@ export function buildKIP7(opts: KIP7Options): Contract {
   addKIP7Base(c, allOpts.name, allOpts.symbol);
 
   if (allOpts.premint) {
-    addKIP7Premintable(c, allOpts.premint);
+    addKIP7Premint(c, allOpts.premint);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addKIP7Burnable(c);
   }
 
-  if (allOpts.freezable) {
+  if (allOpts.features.freezable) {
     addKIP7Freezable(c, access);
   }
 
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addKIP7Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.mintable) {
+  if (allOpts.features.mintable) {
     addKIP7Mintable(c, access);
   }
 
-  if (allOpts.lockable) {
+  if (allOpts.features.lockable) {
     addKIP7Lockable(c, access);
   }
 

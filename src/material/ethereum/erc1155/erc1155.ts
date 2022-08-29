@@ -19,22 +19,25 @@ export interface ERC1155Options extends CommonOptions {
   name: string;
   uri: string;
 
-  burnable?: boolean;
-  pausable?: boolean;
-  mintable?: boolean;
-  supply?: boolean;
-  updatableUri?: boolean;
+  features: {
+    burnable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    supply?: boolean;
+    updatableUri?: boolean;
+  };
 }
 
 export const defaults: Required<ERC1155Options> = {
   name: "MyToken",
   uri: "",
-
-  burnable: false,
-  pausable: false,
-  mintable: false,
-  supply: false,
-  updatableUri: true,
+  features: {
+    burnable: false,
+    pausable: false,
+    mintable: false,
+    supply: false,
+    updatableUri: true,
+  },
   access: false,
   info: commonDefaults.info,
 } as const;
@@ -43,11 +46,14 @@ function withDefaults(opts: ERC1155Options): Required<ERC1155Options> {
   return {
     ...opts,
     ...withCommonDefaults(opts),
-    burnable: opts.burnable ?? defaults.burnable,
-    pausable: opts.pausable ?? defaults.pausable,
-    mintable: opts.mintable ?? defaults.mintable,
-    supply: opts.supply ?? defaults.supply,
-    updatableUri: opts.updatableUri ?? defaults.updatableUri,
+    features: {
+      burnable: opts.features.burnable ?? defaults.features.burnable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
+      supply: opts.features.supply ?? defaults.features.supply,
+      updatableUri:
+        opts.features.updatableUri ?? defaults.features.updatableUri,
+    },
   };
 }
 
@@ -58,9 +64,9 @@ export function printERC1155(opts: ERC1155Options = defaults): string {
 export function isAccessControlRequired(
   opts: Partial<ERC1155Options>
 ): boolean {
-  return (opts.mintable ||
-    opts.pausable ||
-    opts.updatableUri !== false) as boolean;
+  return (opts.features?.mintable ||
+    opts.features?.pausable ||
+    opts.features?.updatableUri !== false) as boolean;
 }
 
 export function buildERC1155(opts: ERC1155Options): Contract {
@@ -72,23 +78,23 @@ export function buildERC1155(opts: ERC1155Options): Contract {
 
   addERC1155Base(c, allOpts.uri);
 
-  if (allOpts.updatableUri) {
+  if (allOpts.features.updatableUri) {
     addERC1155URI(c, access);
   }
 
-  if (allOpts.pausable) {
+  if (allOpts.features.pausable) {
     addERC1155Pausable(c, access, [functions._beforeTokenTransfer]);
   }
 
-  if (allOpts.burnable) {
+  if (allOpts.features.burnable) {
     addERC1155Burnable(c);
   }
 
-  if (allOpts.mintable) {
+  if (allOpts.features.mintable) {
     addERC1155Mintable(c, access);
   }
 
-  if (allOpts.supply) {
+  if (allOpts.features.supply) {
     addERC1155Supply(c);
   }
 
