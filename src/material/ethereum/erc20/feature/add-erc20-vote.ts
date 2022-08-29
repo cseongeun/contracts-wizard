@@ -1,5 +1,6 @@
 import type { ContractBuilder } from "../../../contract";
 import { defineFunctions } from "../../../../utils/define-functions";
+import { pathPrefix } from "../../../sourcecode";
 
 export function addERC20Vote(c: ContractBuilder) {
   if (!c.parents.some((p) => p.contract.name === "ERC20Permit")) {
@@ -8,7 +9,7 @@ export function addERC20Vote(c: ContractBuilder) {
 
   c.addParent({
     name: "ERC20Votes",
-    path: "@hexlant/contracts/token/erc20/features/ERC20Votes.sol",
+    path: `${pathPrefix}/token/erc20/features/ERC20Votes.sol`,
   });
   c.addOverride("ERC20Votes", functions._mint);
   c.addOverride("ERC20Votes", functions._burn);

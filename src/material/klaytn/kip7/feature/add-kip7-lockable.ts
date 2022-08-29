@@ -6,13 +6,13 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC20Lockable(c: ContractBuilder, access: Access) {
+export function addKIP7Lockable(c: ContractBuilder, access: Access) {
   c.addParent({
-    name: "ERC20Lockable",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Lockable.sol`,
+    name: "KIP7Lockable",
+    path: `${pathPrefix}/klaytn/kip7/features/KIP7Lockable.sol`,
   });
 
-  c.addOverride("ERC20Lockable", functions._beforeTokenTransfer);
+  c.addOverride("KIP7Lockable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
   c.addFunctionCode("_lock(account, amount, reason, release);", functions.lock);

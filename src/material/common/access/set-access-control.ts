@@ -1,5 +1,6 @@
 import type { ContractBuilder, BaseFunction } from "../../contract";
 import { supportsInterface } from "../../common-functions";
+import { pathPrefix } from "../../sourcecode";
 
 export const accessOptions = [false, "ownable", "roles"] as const;
 
@@ -62,10 +63,10 @@ export function requireAccessControl(
 const parents = {
   Ownable: {
     name: "Ownable",
-    path: "@hexlant/contracts/access/Ownable.sol",
+    path: `${pathPrefix}/access/Ownable.sol`,
   },
   AccessControl: {
     name: "AccessControl",
-    path: "@hexlant/contracts/access/AccessControl.sol",
+    path: `${pathPrefix}/access/AccessControl.sol`,
   },
 };

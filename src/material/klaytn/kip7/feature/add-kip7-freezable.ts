@@ -6,13 +6,13 @@ import {
 } from "../../../common/access/set-access-control";
 import { pathPrefix } from "../../../sourcecode";
 
-export function addERC20Freezable(c: ContractBuilder, access: Access) {
+export function addKIP7Freezable(c: ContractBuilder, access: Access) {
   c.addParent({
-    name: "ERC20Freezable",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Freezable.sol`,
+    name: "KIP7Freezable",
+    path: `${pathPrefix}/klaytn/kip7/features/KIP7Freezable.sol`,
   });
 
-  c.addOverride("ERC20Freezable", functions._beforeTokenTransfer);
+  c.addOverride("KIP7Freezable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
   c.addFunctionCode("_freeze();", functions.freeze);

@@ -4,11 +4,12 @@ import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
+import { pathPrefix } from "../../../sourcecode";
 
 export function addERC20Snapshot(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "ERC20Snapshot",
-    path: "@hexlant/contracts/ethereum/erc20/features/ERC20Snapshot.sol",
+    path: `${pathPrefix}/ethereum/erc20/features/ERC20Snapshot.sol`,
   });
 
   c.addOverride("ERC20Snapshot", functions._beforeTokenTransfer);

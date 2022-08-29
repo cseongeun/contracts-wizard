@@ -4,6 +4,7 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
+import { pathPrefix } from "../../../sourcecode";
 
 export function addERC20Pausable(
   c: ContractBuilder,
@@ -12,7 +13,7 @@ export function addERC20Pausable(
 ) {
   c.addParent({
     name: "ERC20Pausable",
-    path: "@hexlant/contracts/ethereum/erc20/features/ERC20Pausable.sol",
+    path: `${pathPrefix}/ethereum/erc20/features/ERC20Pausable.sol`,
   });
 
   for (const fn of pausableFns) {
