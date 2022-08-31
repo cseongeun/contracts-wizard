@@ -15,11 +15,13 @@ import { addKIP7Base } from "./metadata/add-kip7-base";
 import { addKIP7Premint } from "./metadata/add-kip7-premint";
 import { addKIP7Lockable } from "./feature/add-kip7-lockable";
 import { addKIP7Freezable } from "./feature/add-kip7-freezable";
+import { addKIP7Capped } from "./feature/add-kip7-capped";
 
 export interface KIP7Options extends CommonOptions {
   name: string;
   symbol: string;
   premint?: string;
+  capped?: string;
   features: {
     burnable?: boolean;
     freezable?: boolean;
@@ -33,6 +35,7 @@ export const defaults: Required<KIP7Options> = {
   name: "MyToken",
   symbol: "MTK",
   premint: "0",
+  capped: "0",
   features: {
     burnable: false,
     freezable: false,
@@ -49,6 +52,7 @@ function withDefaults(opts: KIP7Options): Required<KIP7Options> {
     ...opts,
     ...withCommonDefaults(opts),
     premint: opts.premint || defaults.premint,
+    capped: opts.capped ?? defaults.capped,
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
       freezable: opts.features.freezable ?? defaults.features.freezable,
@@ -78,6 +82,10 @@ export function buildKIP7(opts: KIP7Options): Contract {
   const { access, info } = allOpts;
 
   addKIP7Base(c, allOpts.name, allOpts.symbol);
+
+  if (allOpts.capped) {
+    addKIP7Capped(c, allOpts.capped);
+  }
 
   if (allOpts.premint) {
     addKIP7Premint(c, allOpts.premint);

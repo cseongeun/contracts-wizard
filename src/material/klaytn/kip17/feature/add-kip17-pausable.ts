@@ -8,17 +8,18 @@ import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addKIP17Pausable(
   c: ContractBuilder,
-  access: Access,
-  pausableFns: BaseFunction[]
+  access: Access
+  // pausableFns: BaseFunction[]
 ) {
   c.addParent({
     name: "KIP17Pausable",
     path: `${pathPrefix}/klaytn/kip17/features/KIP17Pausable.sol`,
   });
 
-  for (const fn of pausableFns) {
-    c.addModifier("whenNotPaused", fn);
-  }
+  // for (const fn of pausableFns) {
+  //   c.addModifier("whenNotPaused", fn);
+  // }
+  c.addOverride("KIP17Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");
   c.addFunctionCode("_pause();", functions.pause);
@@ -28,6 +29,14 @@ export function addKIP17Pausable(
 }
 
 const functions = defineFunctions({
+  _beforeTokenTransfer: {
+    kind: "internal" as const,
+    args: [
+      { name: "from", type: "address" },
+      { name: "to", type: "address" },
+      { name: "tokenId", type: "uint256" },
+    ],
+  },
   pause: {
     kind: "public" as const,
     args: [],

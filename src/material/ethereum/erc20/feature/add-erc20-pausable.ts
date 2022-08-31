@@ -8,17 +8,19 @@ import { pathPrefix } from "../../../../utils/sourcecode";
 
 export function addERC20Pausable(
   c: ContractBuilder,
-  access: Access,
-  pausableFns: BaseFunction[]
+  access: Access
+  // pausableFns: BaseFunction[]
 ) {
   c.addParent({
     name: "ERC20Pausable",
     path: `${pathPrefix}/ethereum/erc20/features/ERC20Pausable.sol`,
   });
 
-  for (const fn of pausableFns) {
-    c.addModifier("whenNotPaused", fn);
-  }
+  // for (const fn of pausableFns) {
+  //   c.addModifier("whenNotPaused", fn);
+  // }
+
+  c.addOverride("ERC20Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");
   c.addFunctionCode("_pause();", functions.pause);
@@ -28,6 +30,14 @@ export function addERC20Pausable(
 }
 
 const functions = defineFunctions({
+  _beforeTokenTransfer: {
+    kind: "internal" as const,
+    args: [
+      { name: "from", type: "address" },
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+  },
   pause: {
     kind: "public" as const,
     args: [],

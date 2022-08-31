@@ -14,6 +14,7 @@ import { addKIP37Pausable } from "./feature/add-kip37-pausable";
 import { addKIP37Supply } from "./feature/add-kip37-supply";
 import { addKIP37Base } from "./metadata/add-kip37-base";
 import { addKIP37URI } from "./metadata/add-kip37-uri";
+import { addERC1155Freezable } from "../../ethereum/erc1155/feature/add-erc1155-freezable";
 
 export interface KIP37Options extends CommonOptions {
   name: string;
@@ -21,6 +22,7 @@ export interface KIP37Options extends CommonOptions {
   features: {
     burnable?: boolean;
     pausable?: boolean;
+    freezable?: boolean;
     mintable?: boolean;
     supply?: boolean;
     updatableUri?: boolean;
@@ -33,6 +35,7 @@ export const defaults: Required<KIP37Options> = {
   features: {
     burnable: false,
     pausable: false,
+    freezable: false,
     mintable: false,
     supply: false,
     updatableUri: true,
@@ -48,6 +51,7 @@ function withDefaults(opts: KIP37Options): Required<KIP37Options> {
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
       supply: opts.features.supply ?? defaults.features.supply,
       updatableUri:
@@ -62,6 +66,7 @@ export function printKIP37(opts: KIP37Options = defaults): string {
 
 export function isAccessControlRequired(opts: Partial<KIP37Options>): boolean {
   return (opts.features?.mintable ||
+    opts.features?.freezable ||
     opts.features?.pausable ||
     opts.features?.updatableUri !== false) as boolean;
 }
@@ -80,7 +85,11 @@ export function buildKIP37(opts: KIP37Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addKIP37Pausable(c, access, [functions._beforeTokenTransfer]);
+    addKIP37Pausable(c, access);
+  }
+
+  if (allOpts.features.pausable) {
+    addERC1155Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {

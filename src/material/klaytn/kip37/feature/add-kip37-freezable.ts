@@ -1,32 +1,24 @@
 import type { ContractBuilder, BaseFunction } from "../../../../utils/contract";
+import { defineFunctions } from "../../../../utils/define-functions";
 import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addERC1155Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addKIP37Freezable(c: ContractBuilder, access: Access) {
   c.addParent({
-    name: "ERC1155Pausable",
-    path: `${pathPrefix}/ethereum/erc1155/features/ERC1155Pausable.sol`,
+    name: "KIP37Freezable",
+    path: `${pathPrefix}/klaytn/kip37/features/KIP37Freezable.sol`,
   });
 
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
+  c.addOverride("KIP37Freezable", functions._beforeTokenTransfer);
 
-  c.addOverride("ERC1155Pausable", functions._beforeTokenTransfer);
+  requireAccessControl(c, functions.freeze, access, "FREEZER");
+  c.addFunctionCode("_freeze();", functions.freeze);
 
-  requireAccessControl(c, functions.pause, access, "PAUSER");
-  c.addFunctionCode("_pause();", functions.pause);
-
-  requireAccessControl(c, functions.unpause, access, "PAUSER");
-  c.addFunctionCode("_unpause();", functions.unpause);
+  requireAccessControl(c, functions.unfreeze, access, "FREEZER");
+  c.addFunctionCode("_unfreeze();", functions.unfreeze);
 }
 
 const functions = defineFunctions({
@@ -41,13 +33,13 @@ const functions = defineFunctions({
       { name: "data", type: "bytes memory" },
     ],
   },
-  pause: {
+  freeze: {
     kind: "public" as const,
-    args: [],
+    args: [{ name: "account", type: "address" }],
   },
 
-  unpause: {
+  unfreeze: {
     kind: "public" as const,
-    args: [],
+    args: [{ name: "account", type: "address" }],
   },
 });

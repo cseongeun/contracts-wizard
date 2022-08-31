@@ -95,7 +95,7 @@ export function buildERC721(opts: ERC721Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addERC721Pausable(c, access, [functions._beforeTokenTransfer]);
+    addERC721Pausable(c, access);
   }
 
   if (allOpts.features.burnable) {
@@ -123,7 +123,7 @@ const functions = defineFunctions({
     args: [
       { name: "from", type: "address" },
       { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
+      { name: "tokenId", type: "uint256" },
     ],
   },
 });

@@ -93,7 +93,7 @@ export function buildKIP17(opts: KIP17Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addKIP17Pausable(c, access, [functions._beforeTokenTransfer]);
+    addKIP17Pausable(c, access);
   }
 
   if (allOpts.features.burnable) {

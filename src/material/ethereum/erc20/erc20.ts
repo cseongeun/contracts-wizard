@@ -18,13 +18,10 @@ import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20Capped } from "./feature/add-erc20-capped";
 
 export interface ERC20Options extends CommonOptions {
-  // metadata
   name: string;
   symbol: string;
   premint?: string;
   capped?: string;
-
-  // feature
   features: {
     burnable?: boolean;
     freezable?: boolean;
@@ -35,13 +32,10 @@ export interface ERC20Options extends CommonOptions {
 }
 
 export const defaults: Required<ERC20Options> = {
-  // metadata
   name: "MyToken",
   symbol: "MTK",
   premint: "0",
   capped: "0",
-
-  // feature
   features: {
     burnable: false,
     freezable: false,
@@ -49,9 +43,7 @@ export const defaults: Required<ERC20Options> = {
     pausable: false,
     mintable: false,
   },
-  // access
   access: commonDefaults.access,
-  // info
   info: commonDefaults.info,
 } as const;
 
@@ -108,7 +100,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addERC20Pausable(c, access, [functions._beforeTokenTransfer]);
+    addERC20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {

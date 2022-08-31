@@ -14,6 +14,7 @@ import { addERC1155Pausable } from "./feature/add-erc1155-pausable";
 import { addERC1155Supply } from "./feature/add-erc1155-supply";
 import { addERC1155Base } from "./metadata/add-erc1155-base";
 import { addERC1155URI } from "./metadata/add-erc1155-uri";
+import { addERC1155Freezable } from "./feature/add-erc1155-freezable";
 
 export interface ERC1155Options extends CommonOptions {
   name: string;
@@ -21,6 +22,7 @@ export interface ERC1155Options extends CommonOptions {
 
   features: {
     burnable?: boolean;
+    freezable?: boolean;
     pausable?: boolean;
     mintable?: boolean;
     supply?: boolean;
@@ -34,6 +36,7 @@ export const defaults: Required<ERC1155Options> = {
   features: {
     burnable: false,
     pausable: false,
+    freezable: false,
     mintable: false,
     supply: false,
     updatableUri: true,
@@ -48,6 +51,7 @@ function withDefaults(opts: ERC1155Options): Required<ERC1155Options> {
     ...withCommonDefaults(opts),
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
       supply: opts.features.supply ?? defaults.features.supply,
@@ -65,6 +69,7 @@ export function isAccessControlRequired(
   opts: Partial<ERC1155Options>
 ): boolean {
   return (opts.features?.mintable ||
+    opts.features?.freezable ||
     opts.features?.pausable ||
     opts.features?.updatableUri !== false) as boolean;
 }
@@ -83,7 +88,11 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addERC1155Pausable(c, access, [functions._beforeTokenTransfer]);
+    addERC1155Pausable(c, access);
+  }
+
+  if (allOpts.features.freezable) {
+    addERC1155Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {
