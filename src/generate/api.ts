@@ -1,4 +1,4 @@
-import type { CommonOptions } from "./common-options";
+import type { CommonOptions } from "../utils/common-options";
 import {
   printERC20,
   defaults as erc20defaults,
