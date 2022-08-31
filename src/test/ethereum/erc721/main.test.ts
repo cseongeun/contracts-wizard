@@ -7,13 +7,11 @@ describe("ERC721", () => {
 
     const opts = token.defaults;
 
+    opts.features.burnable = true;
     opts.features.mintable = true;
-    console.log(token.print());
-
-    // opts.features.autoIncrementId = true;
-    // console.log(token.print());
-
     opts.features.uriStorage = true;
+    // opts.features.autoIncrementId = true;
+
     console.log(token.print());
   });
 });
