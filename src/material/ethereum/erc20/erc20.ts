@@ -95,7 +95,14 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.metadata.premint) {
-    addERC20Premint(c, allOpts.metadata.premint);
+    if (
+      allOpts.metadata.capped &&
+      allOpts.metadata.premint > allOpts.metadata.capped
+    ) {
+      addERC20Premint(c, allOpts.metadata.capped);
+    } else {
+      addERC20Premint(c, allOpts.metadata.premint);
+    }
   }
 
   if (allOpts.features.burnable) {
