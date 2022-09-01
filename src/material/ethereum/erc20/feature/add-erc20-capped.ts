@@ -4,11 +4,6 @@ import { pathPrefix } from "../../../../utils/sourcecode";
 export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
 export function addERC20Capped(c: ContractBuilder, amount: string) {
-  c.addParent({
-    name: "ERC20Capped",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Capped.sol`,
-  });
-
   const m = amount.match(premintPattern);
 
   if (m) {
@@ -22,6 +17,11 @@ export function addERC20Capped(c: ContractBuilder, amount: string) {
       const units = integer + decimals + zeroes;
       const exp =
         decimalPlace <= 0 ? "decimals()" : `(decimals() - ${decimalPlace})`;
+
+      c.addParent({
+        name: "ERC20Capped",
+        path: `${pathPrefix}/ethereum/erc20/features/ERC20Capped.sol`,
+      });
 
       c.addConstructorCode(`_setCap(${units} * 10 ** ${exp});`);
     }
