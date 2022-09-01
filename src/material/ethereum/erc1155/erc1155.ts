@@ -17,9 +17,10 @@ import { addERC1155URI } from "./metadata/add-erc1155-uri";
 import { addERC1155Freezable } from "./feature/add-erc1155-freezable";
 
 export interface ERC1155Options extends CommonOptions {
-  name: string;
-  uri: string;
-
+  metadata: {
+    name: string;
+    uri: string;
+  };
   features: {
     burnable?: boolean;
     freezable?: boolean;
@@ -31,8 +32,10 @@ export interface ERC1155Options extends CommonOptions {
 }
 
 export const defaults: Required<ERC1155Options> = {
-  name: "MyToken",
-  uri: "",
+  metadata: {
+    name: "MyToken",
+    uri: "",
+  },
   features: {
     burnable: false,
     pausable: false,
@@ -47,8 +50,10 @@ export const defaults: Required<ERC1155Options> = {
 
 function withDefaults(opts: ERC1155Options): Required<ERC1155Options> {
   return {
-    ...opts,
-    ...withCommonDefaults(opts),
+    metadata: {
+      name: opts.metadata.name ?? defaults.metadata.name,
+      uri: opts.metadata.uri ?? defaults.metadata.uri,
+    },
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
       freezable: opts.features.freezable ?? defaults.features.freezable,
@@ -58,6 +63,7 @@ function withDefaults(opts: ERC1155Options): Required<ERC1155Options> {
       updatableUri:
         opts.features.updatableUri ?? defaults.features.updatableUri,
     },
+    ...withCommonDefaults(opts),
   };
 }
 
@@ -77,11 +83,11 @@ export function isAccessControlRequired(
 export function buildERC1155(opts: ERC1155Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addERC1155Base(c, allOpts.uri);
+  addERC1155Base(c, allOpts.metadata.uri);
 
   if (allOpts.features.updatableUri) {
     addERC1155URI(c, access);

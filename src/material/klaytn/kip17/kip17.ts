@@ -17,9 +17,11 @@ import { addKIP17Base } from "./metadata/add-kip17-base";
 import { addKIP17BaseURI } from "./metadata/add-kip17-baseURI";
 
 export interface KIP17Options extends CommonOptions {
-  name: string;
-  symbol: string;
-  baseUri?: string;
+  metadata: {
+    name: string;
+    symbol: string;
+    baseUri?: string;
+  };
   features: {
     enumerable?: boolean;
     uriStorage?: boolean;
@@ -31,9 +33,11 @@ export interface KIP17Options extends CommonOptions {
 }
 
 export const defaults: Required<KIP17Options> = {
-  name: "MyToken",
-  symbol: "MTK",
-  baseUri: "",
+  metadata: {
+    name: "MyToken",
+    symbol: "MTK",
+    baseUri: "",
+  },
   features: {
     enumerable: false,
     uriStorage: false,
@@ -48,9 +52,11 @@ export const defaults: Required<KIP17Options> = {
 
 function withDefaults(opts: KIP17Options): Required<KIP17Options> {
   return {
-    ...opts,
-    ...withCommonDefaults(opts),
-    baseUri: opts.baseUri ?? defaults.baseUri,
+    metadata: {
+      name: opts.metadata.name ?? defaults.metadata.name,
+      symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
+      baseUri: opts.metadata.baseUri ?? defaults.metadata.baseUri,
+    },
     features: {
       enumerable: opts.features.enumerable ?? defaults.features.enumerable,
       uriStorage: opts.features.uriStorage ?? defaults.features.uriStorage,
@@ -60,6 +66,7 @@ function withDefaults(opts: KIP17Options): Required<KIP17Options> {
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
     },
+    ...withCommonDefaults(opts),
   };
 }
 
@@ -74,14 +81,14 @@ export function isAccessControlRequired(opts: Partial<KIP17Options>): boolean {
 export function buildKIP17(opts: KIP17Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addKIP17Base(c, allOpts.name, allOpts.symbol);
+  addKIP17Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.baseUri) {
-    addKIP17BaseURI(c, allOpts.baseUri);
+  if (allOpts.metadata.baseUri) {
+    addKIP17BaseURI(c, allOpts.metadata.baseUri);
   }
 
   if (allOpts.features.enumerable) {

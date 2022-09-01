@@ -7,8 +7,7 @@ describe("ERC20", () => {
 
     const opts = token.defaults;
 
-    opts.capped = "100";
-    opts.premint = "100";
+    opts.metadata.premint.value = "100";
     console.log(token.print());
   });
 });

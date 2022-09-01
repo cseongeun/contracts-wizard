@@ -17,11 +17,11 @@ import { addERC721Base } from "./metadata/add-erc721-base";
 import { addERC721BaseURI } from "./metadata/add-erc721-baseURI";
 
 export interface ERC721Options extends CommonOptions {
-  // metadata
-  name: string;
-  symbol: string;
-  baseUri?: string;
-  // feature
+  metadata: {
+    name: string;
+    symbol: string;
+    baseUri?: string;
+  };
   features: {
     enumerable?: boolean;
     uriStorage?: boolean;
@@ -33,9 +33,11 @@ export interface ERC721Options extends CommonOptions {
 }
 
 export const defaults: Required<ERC721Options> = {
-  name: "MyToken",
-  symbol: "MTK",
-  baseUri: "",
+  metadata: {
+    name: "MyToken",
+    symbol: "MTK",
+    baseUri: "",
+  },
   features: {
     enumerable: false,
     uriStorage: false,
@@ -50,9 +52,11 @@ export const defaults: Required<ERC721Options> = {
 
 function withDefaults(opts: ERC721Options): Required<ERC721Options> {
   return {
-    ...opts,
-    ...withCommonDefaults(opts),
-    baseUri: opts.baseUri ?? defaults.baseUri,
+    metadata: {
+      name: opts.metadata.name ?? defaults.metadata.name,
+      symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
+      baseUri: opts.metadata.baseUri ?? defaults.metadata.baseUri,
+    },
     features: {
       enumerable: opts.features.enumerable ?? defaults.features.enumerable,
       uriStorage: opts.features.uriStorage ?? defaults.features.uriStorage,
@@ -62,6 +66,7 @@ function withDefaults(opts: ERC721Options): Required<ERC721Options> {
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
     },
+    ...withCommonDefaults(opts),
   };
 }
 
@@ -76,14 +81,14 @@ export function isAccessControlRequired(opts: Partial<ERC721Options>): boolean {
 export function buildERC721(opts: ERC721Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addERC721Base(c, allOpts.name, allOpts.symbol);
+  addERC721Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.baseUri) {
-    addERC721BaseURI(c, allOpts.baseUri);
+  if (allOpts.metadata.baseUri) {
+    addERC721BaseURI(c, allOpts.metadata.baseUri);
   }
 
   if (allOpts.features.enumerable) {

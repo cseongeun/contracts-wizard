@@ -18,10 +18,12 @@ import { addKIP7Freezable } from "./feature/add-kip7-freezable";
 import { addKIP7Capped } from "./feature/add-kip7-capped";
 
 export interface KIP7Options extends CommonOptions {
-  name: string;
-  symbol: string;
-  premint?: string;
-  capped?: string;
+  metadata: {
+    name: string;
+    symbol: string;
+    premint?: string;
+    capped?: string;
+  };
   features: {
     burnable?: boolean;
     freezable?: boolean;
@@ -32,10 +34,12 @@ export interface KIP7Options extends CommonOptions {
 }
 
 export const defaults: Required<KIP7Options> = {
-  name: "MyToken",
-  symbol: "MTK",
-  premint: "0",
-  capped: "0",
+  metadata: {
+    name: "MyToken",
+    symbol: "MTK",
+    premint: "0",
+    capped: "0",
+  },
   features: {
     burnable: false,
     freezable: false,
@@ -49,10 +53,12 @@ export const defaults: Required<KIP7Options> = {
 
 function withDefaults(opts: KIP7Options): Required<KIP7Options> {
   return {
-    ...opts,
-    ...withCommonDefaults(opts),
-    premint: opts.premint || defaults.premint,
-    capped: opts.capped ?? defaults.capped,
+    metadata: {
+      name: opts.metadata.name || defaults.metadata.name,
+      symbol: opts.metadata.symbol || defaults.metadata.symbol,
+      premint: opts.metadata.premint || defaults.metadata.premint,
+      capped: opts.metadata.capped ?? defaults.metadata.capped,
+    },
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
       freezable: opts.features.freezable ?? defaults.features.freezable,
@@ -60,6 +66,7 @@ function withDefaults(opts: KIP7Options): Required<KIP7Options> {
       pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
     },
+    ...withCommonDefaults(opts),
   };
 }
 
@@ -77,18 +84,18 @@ export function isAccessControlRequired(opts: Partial<KIP7Options>): boolean {
 export function buildKIP7(opts: KIP7Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addKIP7Base(c, allOpts.name, allOpts.symbol);
+  addKIP7Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.capped) {
-    addKIP7Capped(c, allOpts.capped);
+  if (allOpts.metadata.capped) {
+    addKIP7Capped(c, allOpts.metadata.capped);
   }
 
-  if (allOpts.premint) {
-    addKIP7Premint(c, allOpts.premint);
+  if (allOpts.metadata.premint) {
+    addKIP7Premint(c, allOpts.metadata.premint);
   }
 
   if (allOpts.features.burnable) {

@@ -17,8 +17,10 @@ import { addKIP37URI } from "./metadata/add-kip37-uri";
 import { addERC1155Freezable } from "../../ethereum/erc1155/feature/add-erc1155-freezable";
 
 export interface KIP37Options extends CommonOptions {
-  name: string;
-  uri: string;
+  metadata: {
+    name: string;
+    uri: string;
+  };
   features: {
     burnable?: boolean;
     pausable?: boolean;
@@ -30,8 +32,10 @@ export interface KIP37Options extends CommonOptions {
 }
 
 export const defaults: Required<KIP37Options> = {
-  name: "MyToken",
-  uri: "",
+  metadata: {
+    name: "MyToken",
+    uri: "",
+  },
   features: {
     burnable: false,
     pausable: false,
@@ -46,17 +50,20 @@ export const defaults: Required<KIP37Options> = {
 
 function withDefaults(opts: KIP37Options): Required<KIP37Options> {
   return {
-    ...opts,
-    ...withCommonDefaults(opts),
+    metadata: {
+      name: opts.metadata.name ?? defaults.metadata.name,
+      uri: opts.metadata.uri ?? defaults.metadata.uri,
+    },
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
-      pausable: opts.features.pausable ?? defaults.features.pausable,
       freezable: opts.features.freezable ?? defaults.features.freezable,
+      pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
       supply: opts.features.supply ?? defaults.features.supply,
       updatableUri:
         opts.features.updatableUri ?? defaults.features.updatableUri,
     },
+    ...withCommonDefaults(opts),
   };
 }
 
@@ -74,11 +81,11 @@ export function isAccessControlRequired(opts: Partial<KIP37Options>): boolean {
 export function buildKIP37(opts: KIP37Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.name);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addKIP37Base(c, allOpts.uri);
+  addKIP37Base(c, allOpts.metadata.uri);
 
   if (allOpts.features.updatableUri) {
     addKIP37URI(c, access);
