@@ -95,11 +95,12 @@ export function buildKIP7(opts: KIP7Options): Contract {
   }
 
   if (allOpts.metadata.premint) {
-    if (
-      allOpts.metadata.capped &&
-      allOpts.metadata.premint > allOpts.metadata.capped
-    ) {
-      addKIP7Premint(c, allOpts.metadata.capped);
+    if (allOpts.metadata.capped) {
+      if (allOpts.metadata.premint > allOpts.metadata.capped) {
+        addKIP7Premint(c, allOpts.metadata.capped);
+      } else {
+        addKIP7Premint(c, allOpts.metadata.premint);
+      }
     } else {
       addKIP7Premint(c, allOpts.metadata.premint);
     }
