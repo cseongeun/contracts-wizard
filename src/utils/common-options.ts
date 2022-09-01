@@ -5,7 +5,7 @@ import {
 } from "../material/common/information/set-info";
 
 export const defaults: Required<CommonOptions> = {
-  access: false,
+  access: "ownable",
   info: infoDefaults,
 } as const;
 
