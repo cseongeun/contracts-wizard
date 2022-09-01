@@ -100,7 +100,7 @@ export function buildKIP7(opts: KIP7Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addKIP7Pausable(c, access, [functions._beforeTokenTransfer]);
+    addKIP7Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {

@@ -1,6 +1,9 @@
 import { buildERC20, ERC20Options } from "../material/ethereum/erc20/erc20";
 import { buildERC721, ERC721Options } from "../material/ethereum/erc721/erc721";
-import { buildERC1155, ERC1155Options } from "../material/ethereum/erc1155/erc1155";
+import {
+  buildERC1155,
+  ERC1155Options,
+} from "../material/ethereum/erc1155/erc1155";
 import { buildKIP7, KIP7Options } from "../material/klaytn/kip7/kip7";
 import { buildKIP17, KIP17Options } from "../material/klaytn/kip17/kip17";
 import { buildKIP37, KIP37Options } from "../material/klaytn/kip37/kip37";
