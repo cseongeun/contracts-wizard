@@ -1,5 +1,7 @@
 import { describe, test } from "@jest/globals";
 import { erc20 } from "../../../generate/api";
+import { buildERC20 } from "../../../material/ethereum/erc20/erc20";
+import { zipContract } from "../../../utils/zip";
 
 describe("ERC20", () => {
   test("generate", () => {
@@ -8,7 +10,16 @@ describe("ERC20", () => {
     const opts = token.defaults;
 
     opts.metadata.premint = "100";
+    opts.features.burnable = true;
+    opts.features.pausable = true;
 
-    console.log(token.print());
+    const code = token.print(opts);
+    generateFullCode(opts.metadata.name, code);
+
+    // // const code = token.print(opts);
+    // const contract = buildERC20(opts);
+    // const result = zipContract(contract);
+    // console.log(result);
   });
+  it("asdf", async () => {});
 });
