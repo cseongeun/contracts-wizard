@@ -1,5 +1,5 @@
 import path from "path";
-import * as fs from "fs";
+import fs from "fs";
 import * as constants from "./constants";
 import { existsFile } from "./file";
 

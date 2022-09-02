@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import fs from "fs";
 import solc from "solc";
 
 export const compile = (contractName: string, content: string) => {
