@@ -1,1 +1,1 @@
-export const pathPrefix = "@hexlant/contracts";
+export const pathPrefix = "@seongeun/standard-contract/contracts";
