@@ -1,5 +1,5 @@
 import * as fs from "fs";
-const solc = require("solc");
+import solc from "solc";
 
 export const compile = (contractName: string, content: string) => {
   var input = {
