@@ -8,5 +8,6 @@
     "strict": true,                                      /* Enable all strict type-checking options. */
     "skipLibCheck": true,
     "declaration": true,
-  }
+    "baseUrl": "src"
+  },
 }
