@@ -36,7 +36,6 @@
     "@seongeun/standard-contract": "^0.0.10",
     "array.prototype.flatmap": "^1.2.4",
     "chalk": "^5.0.1",
-    "glob-promise": "^5.0.0",
-    "solc": "^0.8.16"
+    "glob-promise": "^5.0.0"
   }
 }

@@ -10,4 +10,3 @@ export { KIP37Options } from "./material/klaytn/kip37/kip37";
 export * from "./utils/contract";
 export * from "./utils/print";
 export * from "./generate/api";
-export * from "./utils/compile";
