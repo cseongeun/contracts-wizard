@@ -17,7 +17,7 @@
     "test": "jest",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "autopublish": "npm run clean; npm run build; npm version patch; npm publish"
+    "autopublish": "npm run clean; npm version patch; npm publish"
   },
   "keywords": [],
   "devDependencies": {
