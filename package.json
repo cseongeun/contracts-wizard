@@ -33,6 +33,7 @@
     "typescript": "^4.8.2"
   },
   "dependencies": {
-    "array.prototype.flatmap": "^1.2.4"
+    "array.prototype.flatmap": "^1.2.4",
+    "glob-promise": "^5.0.0"
   }
 }
