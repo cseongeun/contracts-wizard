@@ -7,18 +7,17 @@ import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
-import { addERC20Burnable } from "./feature/add-erc20-burnable";
-import { addERC20Mintable } from "./feature/add-erc20-mintable";
-import { addERC20Pausable } from "./feature/add-erc20-pausable";
-import { addERC20Base } from "./metadata/add-erc20-base";
-import { addERC20Premint } from "./metadata/add-erc20-premint";
-import { addERC20Lockable } from "./feature/add-erc20-lockable";
-import { addERC20Freezable } from "./feature/add-erc20-freezable";
-import { addERC20Capped } from "./feature/add-erc20-capped";
-import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
+import { addBEP20Burnable } from "./feature/add-bep20-burnable";
+import { addBEP20Mintable } from "./feature/add-bep20-mintable";
+import { addBEP20Pausable } from "./feature/add-bep20-pausable";
+import { addBEP20Base } from "./metadata/add-bep20-base";
+import { addBEP20Premint } from "./metadata/add-bep20-premint";
+import { addBEP20Lockable } from "./feature/add-bep20-lockable";
+import { addBEP20Freezable } from "./feature/add-bep20-freezable";
+import { addBEP20Capped } from "./feature/add-bep20-capped";
+import { addBEP20BatchTransferable } from "./feature/add-bep20-batchTransferable";
 
-
-export interface ERC20Options extends CommonOptions {
+export interface BEP20Options extends CommonOptions {
   metadata: {
     name: string;
     symbol: string;
@@ -35,7 +34,7 @@ export interface ERC20Options extends CommonOptions {
   };
 }
 
-export const defaults: Required<ERC20Options> = {
+export const defaults: Required<BEP20Options> = {
   metadata: {
     name: "MyToken",
     symbol: "MTK",
@@ -54,7 +53,7 @@ export const defaults: Required<ERC20Options> = {
   info: commonDefaults.info,
 } as const;
 
-function withDefaults(opts: ERC20Options): Required<ERC20Options> {
+function withDefaults(opts: BEP20Options): Required<BEP20Options> {
   return {
     metadata: {
       name: opts.metadata.name ?? defaults.metadata.name,
@@ -75,28 +74,28 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
   };
 }
 
-export function printERC20(opts: ERC20Options = defaults): string {
-  return printContract(buildERC20(opts));
+export function printBEP20(opts: BEP20Options = defaults): string {
+  return printContract(buildBEP20(opts));
 }
 
-export function isAccessControlRequired(opts: Partial<ERC20Options>): boolean {
+export function isAccessControlRequired(opts: Partial<BEP20Options>): boolean {
   return (opts.features?.mintable ||
     opts.features?.pausable ||
     opts.features?.freezable ||
     opts.features?.lockable) as boolean;
 }
 
-export function buildERC20(opts: ERC20Options): Contract {
+export function buildBEP20(opts: BEP20Options): Contract {
   const allOpts = withDefaults(opts);
 
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
 
-  addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
+  addBEP20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped) {
-    addERC20Capped(c, allOpts.metadata.capped);
+    addBEP20Capped(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint) {
@@ -105,37 +104,37 @@ export function buildERC20(opts: ERC20Options): Contract {
         parseInt(allOpts.metadata.premint) >
         parseInt(allOpts.metadata.capped as string)
       ) {
-        addERC20Premint(c, allOpts.metadata.capped as string);
+        addBEP20Premint(c, allOpts.metadata.capped as string);
       } else {
-        addERC20Premint(c, allOpts.metadata.premint);
+        addBEP20Premint(c, allOpts.metadata.premint);
       }
     } else {
-      addERC20Premint(c, allOpts.metadata.premint);
+      addBEP20Premint(c, allOpts.metadata.premint);
     }
   }
 
   if (allOpts.features.burnable) {
-    addERC20Burnable(c);
+    addBEP20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    addERC20Freezable(c, access);
+    addBEP20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    addERC20Pausable(c, access);
+    addBEP20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    addERC20Mintable(c, access);
+    addBEP20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    addERC20Lockable(c, access);
+    addBEP20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    addERC20BatchTransferable(c);
+    addBEP20BatchTransferable(c);
   }
 
   setAccessControl(c, access);

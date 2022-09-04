@@ -35,6 +35,24 @@ import {
   isAccessControlRequired as kip37IsAccessControlRequired,
   KIP37Options,
 } from "../material/klaytn/kip37/kip37";
+import {
+  printBEP20,
+  defaults as bep20defaults,
+  isAccessControlRequired as bep20IsAccessControlRequired,
+  BEP20Options,
+} from "../material/binanceSmartChain/bep20/bep20";
+import {
+  printBEP721,
+  defaults as bep721defaults,
+  isAccessControlRequired as bep721IsAccessControlRequired,
+  BEP721Options,
+} from "../material/binanceSmartChain/bep721/bep721";
+import {
+  printBEP1155,
+  defaults as bep1155defaults,
+  isAccessControlRequired as bep1155IsAccessControlRequired,
+  BEP1155Options,
+} from "../material/binanceSmartChain/bep1155/bep1155";
 
 export interface WizardContractAPI<Options extends CommonOptions> {
   print: (opts?: Options) => string;
@@ -48,6 +66,9 @@ export type ERC1155 = WizardContractAPI<ERC1155Options>;
 export type KIP7 = WizardContractAPI<KIP7Options>;
 export type KIP17 = WizardContractAPI<KIP17Options>;
 export type KIP37 = WizardContractAPI<KIP37Options>;
+export type BEP20 = WizardContractAPI<BEP20Options>;
+export type BEP721 = WizardContractAPI<BEP721Options>;
+export type BEP1155 = WizardContractAPI<BEP1155Options>;
 
 export const erc20: ERC20 = {
   print: printERC20,
@@ -78,4 +99,20 @@ export const kip37: KIP37 = {
   print: printKIP37,
   defaults: kip37defaults,
   isAccessControlRequired: kip37IsAccessControlRequired,
+};
+
+export const bep20: BEP20 = {
+  print: printBEP20,
+  defaults: bep20defaults,
+  isAccessControlRequired: bep20IsAccessControlRequired,
+};
+export const bep721: BEP721 = {
+  print: printBEP721,
+  defaults: bep721defaults,
+  isAccessControlRequired: bep721IsAccessControlRequired,
+};
+export const bep1155: BEP1155 = {
+  print: printBEP1155,
+  defaults: bep1155defaults,
+  isAccessControlRequired: bep1155IsAccessControlRequired,
 };
