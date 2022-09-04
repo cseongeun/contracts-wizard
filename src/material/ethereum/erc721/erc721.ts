@@ -121,14 +121,3 @@ export function buildERC721(opts: ERC721Options): Contract {
 
   return c;
 }
-
-const functions = defineFunctions({
-  _beforeTokenTransfer: {
-    kind: "internal" as const,
-    args: [
-      { name: "from", type: "address" },
-      { name: "to", type: "address" },
-      { name: "tokenId", type: "uint256" },
-    ],
-  },
-});

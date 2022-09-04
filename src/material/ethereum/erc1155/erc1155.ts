@@ -44,7 +44,7 @@ export const defaults: Required<ERC1155Options> = {
     supply: false,
     updatableUri: true,
   },
-  access: false,
+  access: "ownable",
   info: commonDefaults.info,
 } as const;
 
@@ -118,17 +118,3 @@ export function buildERC1155(opts: ERC1155Options): Contract {
 
   return c;
 }
-
-const functions = defineFunctions({
-  _beforeTokenTransfer: {
-    kind: "internal" as const,
-    args: [
-      { name: "operator", type: "address" },
-      { name: "from", type: "address" },
-      { name: "to", type: "address" },
-      { name: "ids", type: "uint256[] memory" },
-      { name: "amounts", type: "uint256[] memory" },
-      { name: "data", type: "bytes memory" },
-    ],
-  },
-});

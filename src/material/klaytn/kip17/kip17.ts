@@ -121,14 +121,3 @@ export function buildKIP17(opts: KIP17Options): Contract {
 
   return c;
 }
-
-const functions = defineFunctions({
-  _beforeTokenTransfer: {
-    kind: "internal" as const,
-    args: [
-      { name: "from", type: "address" },
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-  },
-});
