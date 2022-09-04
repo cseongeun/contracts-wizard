@@ -17,10 +17,22 @@ export function addKIP7Lockable(c: ContractBuilder, access: Access) {
   requireAccessControl(c, functions.lock, access, "LOCKER");
   c.addFunctionCode("_lock(account, amount, reason, release);", functions.lock);
 
+  requireAccessControl(c, functions.batchLock, access, "LOCKER");
+  c.addFunctionCode(
+    "_batchLock(accounts, amounts, reasons, releases);",
+    functions.batchLock
+  );
+
   requireAccessControl(c, functions.transferWithLock, access, "LOCKER");
   c.addFunctionCode(
     "_transferWithLock(account, amount, reason, release);",
     functions.transferWithLock
+  );
+
+  requireAccessControl(c, functions.batchTransferWithLock, access, "LOCKER");
+  c.addFunctionCode(
+    "_batchTransferWithLock(accounts, amounts, reasons, releases);",
+    functions.batchTransferWithLock
   );
 
   requireAccessControl(c, functions.extendLock, access, "LOCKER");
@@ -48,7 +60,6 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
   lock: {
     kind: "public" as const,
     args: [
@@ -58,6 +69,15 @@ const functions = defineFunctions({
       { name: "release", type: "uint256" },
     ],
   },
+  batchLock: {
+    kind: "public" as const,
+    args: [
+      { name: "accounts", type: "address[] calldata" },
+      { name: "amounts", type: "uint256[] calldata" },
+      { name: "reasons", type: "bytes32[] calldata" },
+      { name: "releases", type: "uint256[] calldata" },
+    ],
+  },
   transferWithLock: {
     kind: "public" as const,
     args: [
@@ -65,6 +85,15 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
       { name: "reason", type: "bytes32" },
       { name: "release", type: "uint256" },
+    ],
+  },
+  batchTransferWithLock: {
+    kind: "public" as const,
+    args: [
+      { name: "accounts", type: "address[] calldata" },
+      { name: "amounts", type: "uint256[] calldata" },
+      { name: "reasons", type: "bytes32[] calldata" },
+      { name: "releases", type: "uint256[] calldata" },
     ],
   },
   extendLock: {

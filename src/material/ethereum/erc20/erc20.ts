@@ -5,7 +5,6 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC20Burnable } from "./feature/add-erc20-burnable";
@@ -16,6 +15,7 @@ import { addERC20Premint } from "./metadata/add-erc20-premint";
 import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20Capped } from "./feature/add-erc20-capped";
+import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
 
 export interface ERC20Options extends CommonOptions {
   metadata: {
@@ -30,6 +30,7 @@ export interface ERC20Options extends CommonOptions {
     lockable?: boolean;
     pausable?: boolean;
     mintable?: boolean;
+    batchTransferable: boolean;
   };
 }
 
@@ -46,6 +47,7 @@ export const defaults: Required<ERC20Options> = {
     lockable: false,
     pausable: false,
     mintable: false,
+    batchTransferable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -65,6 +67,8 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
       lockable: opts.features.lockable ?? defaults.features.lockable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
+      batchTransferable:
+        opts.features.batchTransferable ?? defaults.features.batchTransferable,
     },
     ...withCommonDefaults(opts),
   };
@@ -129,19 +133,12 @@ export function buildERC20(opts: ERC20Options): Contract {
     addERC20Lockable(c, access);
   }
 
+  if (allOpts.features.batchTransferable) {
+    addERC20BatchTransferable(c);
+  }
+
   setAccessControl(c, access);
   setInformation(c, info);
 
   return c;
 }
-
-const functions = defineFunctions({
-  _beforeTokenTransfer: {
-    kind: "internal" as const,
-    args: [
-      { name: "from", type: "address" },
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-  },
-});

@@ -5,7 +5,6 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addKIP7Burnable } from "./feature/add-kip7-burnable";
@@ -16,6 +15,7 @@ import { addKIP7Premint } from "./metadata/add-kip7-premint";
 import { addKIP7Lockable } from "./feature/add-kip7-lockable";
 import { addKIP7Freezable } from "./feature/add-kip7-freezable";
 import { addKIP7Capped } from "./feature/add-kip7-capped";
+import { addKIP7BatchTransferable } from "./feature/add-kip7-batchTransferable";
 
 export interface KIP7Options extends CommonOptions {
   metadata: {
@@ -30,6 +30,7 @@ export interface KIP7Options extends CommonOptions {
     lockable?: boolean;
     pausable?: boolean;
     mintable?: boolean;
+    batchTransferable: boolean;
   };
 }
 
@@ -46,6 +47,7 @@ export const defaults: Required<KIP7Options> = {
     lockable: false,
     pausable: false,
     mintable: false,
+    batchTransferable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -65,6 +67,8 @@ function withDefaults(opts: KIP7Options): Required<KIP7Options> {
       lockable: opts.features.lockable ?? defaults.features.lockable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
+      batchTransferable:
+        opts.features.batchTransferable ?? defaults.features.batchTransferable,
     },
     ...withCommonDefaults(opts),
   };
@@ -129,19 +133,12 @@ export function buildKIP7(opts: KIP7Options): Contract {
     addKIP7Lockable(c, access);
   }
 
+  if (allOpts.features.batchTransferable) {
+    addKIP7BatchTransferable(c);
+  }
+
   setAccessControl(c, access);
   setInformation(c, info);
 
   return c;
 }
-
-const functions = defineFunctions({
-  _beforeTokenTransfer: {
-    kind: "internal" as const,
-    args: [
-      { name: "from", type: "address" },
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" },
-    ],
-  },
-});
