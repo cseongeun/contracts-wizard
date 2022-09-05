@@ -12,6 +12,7 @@ export function addBEP20Lockable(c: ContractBuilder, access: Access) {
     path: `${pathPrefix}/binanceSmartChain/bep20/features/BEP20Lockable.sol`,
   });
 
+  c.addOverride("BEP20Lockable", functions.balanceOf);
   c.addOverride("BEP20Lockable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
@@ -60,7 +61,12 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
+  balanceOf: {
+    kind: "public" as const,
+    mutability: "view",
+    args: [{ name: "account", type: "address" }],
+    returns: ["uint256"],
+  },
   lock: {
     kind: "public" as const,
     args: [

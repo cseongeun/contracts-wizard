@@ -15,10 +15,10 @@ export function addKIP37Freezable(c: ContractBuilder, access: Access) {
   c.addOverride("KIP37Freezable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
-  c.addFunctionCode("_freeze();", functions.freeze);
+  c.addFunctionCode("_freeze(account);", functions.freeze);
 
   requireAccessControl(c, functions.unfreeze, access, "FREEZER");
-  c.addFunctionCode("_unfreeze();", functions.unfreeze);
+  c.addFunctionCode("_unfreeze(account);", functions.unfreeze);
 }
 
 const functions = defineFunctions({

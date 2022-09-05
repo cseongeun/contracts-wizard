@@ -12,6 +12,7 @@ export function addKIP7Lockable(c: ContractBuilder, access: Access) {
     path: `${pathPrefix}/klaytn/kip7/features/KIP7Lockable.sol`,
   });
 
+  c.addOverride("KIP7Lockable", functions.balanceOf);
   c.addOverride("KIP7Lockable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
@@ -59,6 +60,12 @@ const functions = defineFunctions({
       { name: "to", type: "address" },
       { name: "amount", type: "uint256" },
     ],
+  },
+  balanceOf: {
+    kind: "public" as const,
+    mutability: "view",
+    args: [{ name: "account", type: "address" }],
+    returns: ["uint256"],
   },
   lock: {
     kind: "public" as const,

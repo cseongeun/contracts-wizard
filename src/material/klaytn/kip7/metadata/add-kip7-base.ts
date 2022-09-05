@@ -1,3 +1,4 @@
+import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
@@ -15,6 +16,8 @@ export function addKIP7Base(c: ContractBuilder, name: string, symbol: string) {
   c.addOverride("KIP7", functions._afterTokenTransfer);
   c.addOverride("KIP7", functions._mint);
   c.addOverride("KIP7", functions._burn);
+  c.addOverride("KIP7", functions.balanceOf);
+  c.addOverride("KIP7", supportsInterface);
 }
 
 const functions = defineFunctions({
@@ -26,7 +29,6 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
   _afterTokenTransfer: {
     kind: "internal" as const,
     args: [
@@ -35,7 +37,12 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
+  balanceOf: {
+    kind: "public" as const,
+    mutability: "view",
+    args: [{ name: "account", type: "address" }],
+    returns: ["uint256"],
+  },
   _burn: {
     kind: "internal" as const,
     args: [

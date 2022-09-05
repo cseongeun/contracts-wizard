@@ -29,12 +29,6 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-  balanceOf: {
-    kind: "public" as const,
-    mutability: "view",
-    args: [{ name: "account", type: "address" }],
-    returns: ["uint256"],
-  },
   _afterTokenTransfer: {
     kind: "internal" as const,
     args: [
@@ -43,7 +37,12 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
+  balanceOf: {
+    kind: "public" as const,
+    mutability: "view",
+    args: [{ name: "account", type: "address" }],
+    returns: ["uint256"],
+  },
   _burn: {
     kind: "internal" as const,
     args: [

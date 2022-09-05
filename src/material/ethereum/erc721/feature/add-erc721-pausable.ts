@@ -6,19 +6,12 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addERC721Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addERC721Pausable(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "ERC721Pausable",
     path: `${pathPrefix}/ethereum/erc721/features/ERC721Pausable.sol`,
   });
 
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
   c.addOverride("ERC721Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");

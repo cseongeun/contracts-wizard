@@ -6,11 +6,7 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addERC20Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addERC20Pausable(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "ERC20Pausable",
     path: `${pathPrefix}/ethereum/erc20/features/ERC20Pausable.sol`,

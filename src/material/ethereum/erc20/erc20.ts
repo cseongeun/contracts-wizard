@@ -126,7 +126,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.mintable) {
-    addERC20Mintable(c, access, allOpts.metadata.capped != "0");
+    addERC20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {

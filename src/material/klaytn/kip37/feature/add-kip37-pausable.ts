@@ -6,19 +6,12 @@ import {
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
 
-export function addKIP37Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addKIP37Pausable(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "KIP37Pausable",
     path: `${pathPrefix}/klaytn/kip37/features/KIP37Pausable.sol`,
   });
 
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
   c.addOverride("KIP37Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");

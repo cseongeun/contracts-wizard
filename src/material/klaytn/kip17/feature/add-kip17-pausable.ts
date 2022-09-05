@@ -6,19 +6,12 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addKIP17Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addKIP17Pausable(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "KIP17Pausable",
     path: `${pathPrefix}/klaytn/kip17/features/KIP17Pausable.sol`,
   });
 
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
   c.addOverride("KIP17Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");

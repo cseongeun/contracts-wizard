@@ -6,19 +6,11 @@ import {
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addBEP20Pausable(
-  c: ContractBuilder,
-  access: Access
-  // pausableFns: BaseFunction[]
-) {
+export function addBEP20Pausable(c: ContractBuilder, access: Access) {
   c.addParent({
     name: "BEP20Pausable",
     path: `${pathPrefix}/binanceSmartChain/bep20/features/BEP20Pausable.sol`,
   });
-
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
 
   c.addOverride("BEP20Pausable", functions._beforeTokenTransfer);
 
