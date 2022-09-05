@@ -14,7 +14,7 @@ import { addKIP37Pausable } from "./feature/add-kip37-pausable";
 import { addKIP37Supply } from "./feature/add-kip37-supply";
 import { addKIP37Base } from "./metadata/add-kip37-base";
 import { addKIP37URI } from "./metadata/add-kip37-uri";
-import { addERC1155Freezable } from "../../ethereum/erc1155/feature/add-erc1155-freezable";
+import { addKIP37Freezable } from "./feature/add-kip37-freezable";
 
 export interface KIP37Options extends CommonOptions {
   metadata: {
@@ -96,7 +96,7 @@ export function buildKIP37(opts: KIP37Options): Contract {
   }
 
   if (allOpts.features.pausable) {
-    addERC1155Freezable(c, access);
+    addKIP37Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {
