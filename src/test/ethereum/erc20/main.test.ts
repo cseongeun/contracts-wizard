@@ -7,8 +7,8 @@ describe("ERC20", () => {
     const token = erc20;
     const opts = token.defaults;
 
-    opts.metadata.capped = "100";
     opts.features.mintable = true;
+    opts.metadata.capped = "100";
     const code = token.print(opts);
     console.log(code);
     // const code = token.print(opts);

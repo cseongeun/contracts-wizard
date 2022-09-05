@@ -12,6 +12,7 @@ export function addERC20Lockable(c: ContractBuilder, access: Access) {
     path: `${pathPrefix}/ethereum/erc20/features/ERC20Lockable.sol`,
   });
 
+  c.addOverride("ERC20Lockable", functions.balanceOf);
   c.addOverride("ERC20Lockable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
@@ -59,6 +60,10 @@ const functions = defineFunctions({
       { name: "to", type: "address" },
       { name: "amount", type: "uint256" },
     ],
+  },
+  balanceOf: {
+    kind: "public" as const,
+    args: [{ name: "account", type: "address" }],
   },
   lock: {
     kind: "public" as const,

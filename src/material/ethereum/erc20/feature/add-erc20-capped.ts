@@ -1,4 +1,5 @@
 import type { ContractBuilder } from "../../../../utils/contract";
+import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
 export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
@@ -24,6 +25,18 @@ export function addERC20Capped(c: ContractBuilder, amount: string) {
       });
 
       c.addConstructorCode(`_setCap(${units} * 10 ** ${exp});`);
+
+      c.addOverride("ERC20Capped", functions._mint);
     }
   }
 }
+
+const functions = defineFunctions({
+  _mint: {
+    kind: "internal" as const,
+    args: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+  },
+});

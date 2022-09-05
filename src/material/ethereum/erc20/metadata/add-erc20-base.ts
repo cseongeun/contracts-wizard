@@ -15,6 +15,7 @@ export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
   c.addOverride("ERC20", functions._afterTokenTransfer);
   c.addOverride("ERC20", functions._mint);
   c.addOverride("ERC20", functions._burn);
+  c.addOverride("ERC20", functions.balanceOf);
 }
 
 const functions = defineFunctions({
@@ -26,7 +27,10 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
+  balanceOf: {
+    kind: "public" as const,
+    args: [{ name: "account", type: "address" }],
+  },
   _afterTokenTransfer: {
     kind: "internal" as const,
     args: [
