@@ -63,10 +63,10 @@ export function requireAccessControl(
 const parents = {
   Ownable: {
     name: "Ownable",
-    path: `${pathPrefix}/access/Ownable.sol`,
+    path: `${pathPrefix}/common/access/Ownable.sol`,
   },
   AccessControl: {
     name: "AccessControl",
-    path: `${pathPrefix}/access/AccessControl.sol`,
+    path: `${pathPrefix}/common/access/AccessControl.sol`,
   },
 };
