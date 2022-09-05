@@ -11,9 +11,10 @@ export function addERC20Mintable(
   capped: boolean
 ) {
   requireAccessControl(c, functions.mint, access, "MINTER");
-  c.addFunctionCode("_mint(to, amount);", functions.mint);
+  // c.addFunctionCode("_mint(to, amount);", functions.mint);
 
   if (capped) {
+    c.addOverride("ERC20", functions.mint);
     c.addOverride("ERC20Capped", functions.mint);
   }
 }
