@@ -29,7 +29,9 @@ const functions = defineFunctions({
   },
   balanceOf: {
     kind: "public" as const,
+    mutability: "view",
     args: [{ name: "account", type: "address" }],
+    returns: ["uint256"],
   },
   _afterTokenTransfer: {
     kind: "internal" as const,

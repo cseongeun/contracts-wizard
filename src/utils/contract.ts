@@ -156,6 +156,7 @@ export class ContractBuilder implements Contract {
   }
 
   private addFunction(baseFn: BaseFunction): ContractFunction {
+    console.log(baseFn);
     const signature = [
       baseFn.name,
       "(",
