@@ -126,7 +126,7 @@ export function buildKIP7(opts: KIP7Options): Contract {
   }
 
   if (allOpts.features.mintable) {
-    addKIP7Mintable(c, access, allOpts.metadata.capped != "0");
+    addKIP7Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
