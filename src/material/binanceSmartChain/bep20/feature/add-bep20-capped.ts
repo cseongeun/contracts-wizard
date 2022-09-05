@@ -26,7 +26,7 @@ export function addBEP20Capped(c: ContractBuilder, amount: string) {
 
       c.addConstructorCode(`_setCap(${units} * 10 ** ${exp});`);
 
-      c.addOverride("ERC20Capped", functions._mint);
+      c.addOverride("BEP20Capped", functions._mint);
     }
   }
 }
