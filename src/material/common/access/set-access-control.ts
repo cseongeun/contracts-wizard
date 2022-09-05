@@ -47,6 +47,7 @@ export function requireAccessControl(
     }
     case "roles": {
       const roleId = role + "_ROLE";
+
       if (
         c.addVariable(
           `bytes32 public constant ${roleId} = keccak256("${roleId}");`
@@ -54,6 +55,7 @@ export function requireAccessControl(
       ) {
         c.addConstructorCode(`_grantRole(${roleId}, msg.sender);`);
       }
+
       c.addModifier(`onlyRole(${roleId})`, fn);
       break;
     }

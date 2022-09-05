@@ -1,3 +1,4 @@
+import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
@@ -16,6 +17,7 @@ export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
   c.addOverride("ERC20", functions._mint);
   c.addOverride("ERC20", functions._burn);
   c.addOverride("ERC20", functions.balanceOf);
+  c.addOverride("ERC20", supportsInterface);
 }
 
 const functions = defineFunctions({
