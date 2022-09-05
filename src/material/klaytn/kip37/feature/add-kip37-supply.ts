@@ -7,7 +7,7 @@ export function addKIP37Supply(c: ContractBuilder) {
     name: "KIP37Supply",
     path: `${pathPrefix}/klaytn/kip37/features/KIP37Supply.sol`,
   });
-  c.addOverride("ERC1155Supply", functions._beforeTokenTransfer);
+  c.addOverride("KIP37Supply", functions._beforeTokenTransfer);
 }
 
 const functions = defineFunctions({
