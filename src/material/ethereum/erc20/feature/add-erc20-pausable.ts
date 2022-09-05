@@ -16,10 +16,6 @@ export function addERC20Pausable(
     path: `${pathPrefix}/ethereum/erc20/features/ERC20Pausable.sol`,
   });
 
-  // for (const fn of pausableFns) {
-  //   c.addModifier("whenNotPaused", fn);
-  // }
-
   c.addOverride("ERC20Pausable", functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");

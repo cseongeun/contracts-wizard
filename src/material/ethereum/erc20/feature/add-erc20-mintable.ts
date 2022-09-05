@@ -5,9 +5,17 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 
-export function addERC20Mintable(c: ContractBuilder, access: Access) {
+export function addERC20Mintable(
+  c: ContractBuilder,
+  access: Access,
+  capped: boolean
+) {
   requireAccessControl(c, functions.mint, access, "MINTER");
   c.addFunctionCode("_mint(to, amount);", functions.mint);
+
+  if (capped) {
+    c.addOverride("ERC20Capped", functions.mint);
+  }
 }
 
 const functions = defineFunctions({

@@ -17,7 +17,6 @@ import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20Capped } from "./feature/add-erc20-capped";
 import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
 
-
 export interface ERC20Options extends CommonOptions {
   metadata: {
     name: string;
@@ -127,7 +126,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.mintable) {
-    addERC20Mintable(c, access);
+    addERC20Mintable(c, access, allOpts.metadata.capped != "0");
   }
 
   if (allOpts.features.lockable) {

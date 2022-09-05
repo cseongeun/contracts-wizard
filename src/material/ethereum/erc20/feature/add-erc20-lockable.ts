@@ -60,7 +60,6 @@ const functions = defineFunctions({
       { name: "amount", type: "uint256" },
     ],
   },
-
   lock: {
     kind: "public" as const,
     args: [
