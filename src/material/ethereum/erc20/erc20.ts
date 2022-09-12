@@ -5,7 +5,10 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { setAccessControl } from "../../common/access/set-access-control";
+import {
+  Accesses,
+  setAccessControl,
+} from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC20Burnable } from "./feature/add-erc20-burnable";
 import { addERC20Mintable } from "./feature/add-erc20-mintable";
@@ -16,6 +19,18 @@ import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20Capped } from "./feature/add-erc20-capped";
 import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
+
+enum Features {
+  CAPPED = "FeatureCAPPED",
+  PRE_MINT = "Features.PRE_MINT",
+  BURNABLE = "Features.BURNABLE",
+  FREEZABLE = "Features.FREEZABLE",
+  PAUSABLE = "Features.PAUSABLE",
+  MINTABLE = "Features.MINTABLE",
+  LOCKABLE = "Features.LOCKABLE",
+  BATCH_TRANSFERABLE = "Features.BATCH_TRANSFERABLE",
+}
 
 export interface ERC20Options extends CommonOptions {
   metadata: {
@@ -91,14 +106,17 @@ export function buildERC20(opts: ERC20Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped) {
+    features.push(Features.CAPPED);
     addERC20Capped(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint) {
+    features.push(Features.PRE_MINT);
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
@@ -114,31 +132,47 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
+    features.push(Features.BURNABLE);
     addERC20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
+    features.push(Features.FREEZABLE);
     addERC20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
+    features.push(Features.PAUSABLE);
     addERC20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
+    features.push(Features.MINTABLE);
     addERC20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
+    features.push(Features.LOCKABLE);
     addERC20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
+    features.push(Features.BATCH_TRANSFERABLE);
     addERC20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
+
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access
+      ? Accesses.NONE
+      : access == "ownable"
+      ? Accesses.OWNABLE
+      : Accesses.ROLES
+  );
 
   return c;
 }

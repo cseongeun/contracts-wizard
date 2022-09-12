@@ -8,12 +8,9 @@ describe("ERC20", () => {
     const opts = token.defaults;
 
     opts.features.lockable = true;
+    opts.access = "ownable";
     // opts.metadata.capped =/ "100";
     const code = token.print(opts);
     console.log(code);
-    // const code = token.print(opts);
-    // const contract = buildERC20(opts);
-    // const result = zipContract(contract);
-    // console.log(result);
   });
 });

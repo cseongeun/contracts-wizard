@@ -16,6 +16,11 @@ export function addERC721Base(
     [name, symbol]
   );
 
+  c.addParent({
+    name: "ERC721Feature",
+    path: `${pathPrefix}/ethereum/erc721/ERC721Feature.sol`,
+  });
+
   c.addOverride("ERC721", functions._beforeTokenTransfer);
   c.addOverride("ERC721", functions._afterTokenTransfer);
   c.addOverride("ERC721", functions._burn);

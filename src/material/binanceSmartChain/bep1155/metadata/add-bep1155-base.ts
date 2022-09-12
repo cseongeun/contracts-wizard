@@ -12,6 +12,11 @@ export function addBEP1155Base(c: ContractBuilder, uri: string) {
     [uri]
   );
 
+  c.addParent({
+    name: "BEP1155Feature",
+    path: `${pathPrefix}/binanceSmartChain/bep1155/BEP1155Feature.sol`,
+  });
+
   c.addOverride("BEP1155", functions._beforeTokenTransfer);
   c.addOverride("BEP1155", supportsInterface);
 }

@@ -6,7 +6,10 @@ import {
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
 import { defineFunctions } from "../../../utils/define-functions";
-import { setAccessControl } from "../../common/access/set-access-control";
+import {
+  Accesses,
+  setAccessControl,
+} from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addBEP1155Burnable } from "./feature/add-bep1155-burnable";
 import { addBEP1155Mintable } from "./feature/add-bep1155-mintable";
@@ -15,6 +18,16 @@ import { addBEP1155Supply } from "./feature/add-bep1155-supply";
 import { addBEP1155Base } from "./metadata/add-bep1155-base";
 import { addBEP1155URI } from "./metadata/add-bep1155-uri";
 import { addBEP1155Freezable } from "./feature/add-bep1155-freezable";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
+
+enum Features {
+  URI = "Features.URI",
+  PAUSABLE = "Features.PAUSABLE",
+  FREEZABLE = "Features.FREEZABLE",
+  BURNABLE = "Features.BURNABLE",
+  MINTABLE = "Features.MINTABLE",
+  SUPPLY = "Features.SUPPLY",
+}
 
 export interface BEP1155Options extends CommonOptions {
   metadata: {
@@ -86,35 +99,52 @@ export function buildBEP1155(opts: BEP1155Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addBEP1155Base(c, allOpts.metadata.uri);
 
   if (allOpts.features.updatableUri) {
+    features.push(Features.URI);
     addBEP1155URI(c, access);
   }
 
   if (allOpts.features.pausable) {
+    features.push(Features.PAUSABLE);
     addBEP1155Pausable(c, access);
   }
 
   if (allOpts.features.freezable) {
+    features.push(Features.FREEZABLE);
     addBEP1155Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {
+    features.push(Features.BURNABLE);
     addBEP1155Burnable(c);
   }
 
   if (allOpts.features.mintable) {
+    features.push(Features.MINTABLE);
     addBEP1155Mintable(c, access);
   }
 
   if (allOpts.features.supply) {
+    features.push(Features.SUPPLY);
     addBEP1155Supply(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
+
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access
+      ? Accesses.NONE
+      : access == "ownable"
+      ? Accesses.OWNABLE
+      : Accesses.ROLES
+  );
 
   return c;
 }

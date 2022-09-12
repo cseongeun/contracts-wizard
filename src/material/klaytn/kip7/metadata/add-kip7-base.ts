@@ -12,6 +12,11 @@ export function addKIP7Base(c: ContractBuilder, name: string, symbol: string) {
     [name, symbol]
   );
 
+  c.addParent({
+    name: "KIP7Feature",
+    path: `${pathPrefix}/klaytn/kip7/KIP7Feature.sol`,
+  });
+
   c.addOverride("KIP7", functions._beforeTokenTransfer);
   c.addOverride("KIP7", functions._afterTokenTransfer);
   c.addOverride("KIP7", functions._mint);

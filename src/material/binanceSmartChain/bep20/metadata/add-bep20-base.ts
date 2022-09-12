@@ -12,6 +12,11 @@ export function addBEP20Base(c: ContractBuilder, name: string, symbol: string) {
     [name, symbol]
   );
 
+  c.addParent({
+    name: "BEP20Feature",
+    path: `${pathPrefix}/binanceSmartChain/bep20/BEP20Feature.sol`,
+  });
+
   c.addOverride("BEP20", functions._beforeTokenTransfer);
   c.addOverride("BEP20", functions._afterTokenTransfer);
   c.addOverride("BEP20", functions._mint);
