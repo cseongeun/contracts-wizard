@@ -111,12 +111,16 @@ export function buildKIP7(opts: KIP7Options): Contract {
   addKIP7Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped) {
-    features.push(Features.CAPPED);
+    if (allOpts.metadata.capped != "0") {
+      features.push(Features.CAPPED);
+    }
     addKIP7Capped(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint) {
-    features.push(Features.PRE_MINT);
+    if (allOpts.metadata.premint != "0") {
+      features.push(Features.PRE_MINT);
+    }
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >

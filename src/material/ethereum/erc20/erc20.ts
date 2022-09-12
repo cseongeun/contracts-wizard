@@ -22,7 +22,7 @@ import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable
 import { setAccess, setFeatures } from "../../common/feature/set-features";
 
 enum Features {
-  CAPPED = "FeatureCAPPED",
+  CAPPED = "Feature.CAPPED",
   PRE_MINT = "Features.PRE_MINT",
   BURNABLE = "Features.BURNABLE",
   FREEZABLE = "Features.FREEZABLE",
@@ -111,12 +111,16 @@ export function buildERC20(opts: ERC20Options): Contract {
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped) {
-    features.push(Features.CAPPED);
+    if (allOpts.metadata.capped != "0") {
+      features.push(Features.CAPPED);
+    }
     addERC20Capped(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint) {
-    features.push(Features.PRE_MINT);
+    if (allOpts.metadata.premint != "0") {
+      features.push(Features.PRE_MINT);
+    }
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
