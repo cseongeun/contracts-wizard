@@ -6,7 +6,10 @@ import {
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
 import { defineFunctions } from "../../../utils/define-functions";
-import { setAccessControl } from "../../common/access/set-access-control";
+import {
+  Accesses,
+  setAccessControl,
+} from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addKIP17Burnable } from "./feature/add-kip17-burnable";
 import { addKIP17Enumerable } from "./feature/add-kip17-enumerable";
@@ -15,6 +18,16 @@ import { addKIP17Pausable } from "./feature/add-kip17-pausable";
 import { addKIP17URIStorage } from "./feature/add-kip17-uriStorage";
 import { addKIP17Base } from "./metadata/add-kip17-base";
 import { addKIP17BaseURI } from "./metadata/add-kip17-baseURI";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
+
+enum Features {
+  BASE_URI = "Features.BASE_URI",
+  ENUMERABLE = "Features.ENUMERABLE",
+  URI_STORAGE = "Features.URI_STORAGE",
+  PAUSABLE = "Features.PAUSABLE",
+  BURNABLE = "Features.BURNABLE",
+  MINTABLE = "Features.MINTABLE",
+}
 
 export interface KIP17Options extends CommonOptions {
   metadata: {
@@ -84,30 +97,37 @@ export function buildKIP17(opts: KIP17Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addKIP17Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.baseUri) {
+    features.push(Features.BASE_URI);
     addKIP17BaseURI(c, allOpts.metadata.baseUri);
   }
 
   if (allOpts.features.enumerable) {
+    features.push(Features.ENUMERABLE);
     addKIP17Enumerable(c);
   }
 
   if (allOpts.features.uriStorage) {
+    features.push(Features.URI_STORAGE);
     addKIP17URIStorage(c);
   }
 
   if (allOpts.features.pausable) {
+    features.push(Features.PAUSABLE);
     addKIP17Pausable(c, access);
   }
 
   if (allOpts.features.burnable) {
+    features.push(Features.BURNABLE);
     addKIP17Burnable(c);
   }
 
   if (allOpts.features.mintable) {
+    features.push(Features.MINTABLE);
     addKIP17Mintable(
       c,
       access,
@@ -118,6 +138,16 @@ export function buildKIP17(opts: KIP17Options): Contract {
 
   setAccessControl(c, access);
   setInformation(c, info);
+
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access
+      ? Accesses.NONE
+      : access == "ownable"
+      ? Accesses.OWNABLE
+      : Accesses.ROLES
+  );
 
   return c;
 }

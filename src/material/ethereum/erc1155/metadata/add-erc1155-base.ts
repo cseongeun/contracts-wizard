@@ -12,6 +12,11 @@ export function addERC1155Base(c: ContractBuilder, uri: string) {
     [uri]
   );
 
+  c.addParent({
+    name: "ERC1155Feature",
+    path: `${pathPrefix}/ethereum/erc1155/ERC1155Feature.sol`,
+  });
+
   c.addOverride("ERC1155", functions._beforeTokenTransfer);
   c.addOverride("ERC1155", supportsInterface);
 }

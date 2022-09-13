@@ -1228,6 +1228,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@seongeun/standard-contract@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@seongeun/standard-contract/-/standard-contract-0.0.18.tgz#065a618423850dbbcc7359cf25f26db741cad02c"
+  integrity sha512-xdnb3ccbENAcavWK60pUe5Db6BdBGZdEF0GDXyycV1/vvxZttnKkT3JDkqzDxB4MDRc0gZUqDlRyImtigsBzbA==
+
 "@sinclair/typebox@^0.24.1":
   version "0.24.28"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.24.28.tgz"

@@ -12,6 +12,11 @@ export function addKIP37Base(c: ContractBuilder, uri: string) {
     [uri]
   );
 
+  c.addParent({
+    name: "KIP37Feature",
+    path: `${pathPrefix}/klaytn/kip37/KIP37Feature.sol`,
+  });
+
   c.addOverride("KIP37", functions._beforeTokenTransfer);
   c.addOverride("KIP37", supportsInterface);
 }

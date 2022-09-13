@@ -6,7 +6,10 @@ import {
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
 import { defineFunctions } from "../../../utils/define-functions";
-import { setAccessControl } from "../../common/access/set-access-control";
+import {
+  Accesses,
+  setAccessControl,
+} from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC1155Burnable } from "./feature/add-erc1155-burnable";
 import { addERC1155Mintable } from "./feature/add-erc1155-mintable";
@@ -15,6 +18,16 @@ import { addERC1155Supply } from "./feature/add-erc1155-supply";
 import { addERC1155Base } from "./metadata/add-erc1155-base";
 import { addERC1155URI } from "./metadata/add-erc1155-uri";
 import { addERC1155Freezable } from "./feature/add-erc1155-freezable";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
+
+enum Features {
+  URI = "Features.URI",
+  PAUSABLE = "Features.PAUSABLE",
+  FREEZABLE = "Features.FREEZABLE",
+  BURNABLE = "Features.BURNABLE",
+  MINTABLE = "Features.MINTABLE",
+  SUPPLY = "Features.SUPPLY",
+}
 
 export interface ERC1155Options extends CommonOptions {
   metadata: {
@@ -86,35 +99,52 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addERC1155Base(c, allOpts.metadata.uri);
 
   if (allOpts.features.updatableUri) {
+    features.push(Features.URI);
     addERC1155URI(c, access);
   }
 
   if (allOpts.features.pausable) {
+    features.push(Features.PAUSABLE);
     addERC1155Pausable(c, access);
   }
 
   if (allOpts.features.freezable) {
+    features.push(Features.FREEZABLE);
     addERC1155Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {
+    features.push(Features.BURNABLE);
     addERC1155Burnable(c);
   }
 
   if (allOpts.features.mintable) {
+    features.push(Features.MINTABLE);
     addERC1155Mintable(c, access);
   }
 
   if (allOpts.features.supply) {
+    features.push(Features.SUPPLY);
     addERC1155Supply(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
+
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access
+      ? Accesses.NONE
+      : access == "ownable"
+      ? Accesses.OWNABLE
+      : Accesses.ROLES
+  );
 
   return c;
 }

@@ -5,7 +5,10 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { setAccessControl } from "../../common/access/set-access-control";
+import {
+  Accesses,
+  setAccessControl,
+} from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addBEP20Burnable } from "./feature/add-bep20-burnable";
 import { addBEP20Mintable } from "./feature/add-bep20-mintable";
@@ -16,6 +19,18 @@ import { addBEP20Lockable } from "./feature/add-bep20-lockable";
 import { addBEP20Freezable } from "./feature/add-bep20-freezable";
 import { addBEP20Capped } from "./feature/add-bep20-capped";
 import { addBEP20BatchTransferable } from "./feature/add-bep20-batchTransferable";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
+
+enum Features {
+  CAPPED = "Features.CAPPED",
+  PRE_MINT = "Features.PRE_MINT",
+  BURNABLE = "Features.BURNABLE",
+  FREEZABLE = "Features.FREEZABLE",
+  PAUSABLE = "Features.PAUSABLE",
+  MINTABLE = "Features.MINTABLE",
+  LOCKABLE = "Features.LOCKABLE",
+  BATCH_TRANSFERABLE = "Features.BATCH_TRANSFERABLE",
+}
 
 export interface BEP20Options extends CommonOptions {
   metadata: {
@@ -91,14 +106,22 @@ export function buildBEP20(opts: BEP20Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addBEP20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped) {
+    if (allOpts.metadata.capped != "0") {
+      features.push(Features.CAPPED);
+    }
     addBEP20Capped(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint) {
+    if (allOpts.metadata.premint != "0") {
+      features.push(Features.PRE_MINT);
+    }
+
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
@@ -114,31 +137,47 @@ export function buildBEP20(opts: BEP20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
+    features.push(Features.BURNABLE);
     addBEP20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
+    features.push(Features.FREEZABLE);
     addBEP20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
+    features.push(Features.PAUSABLE);
     addBEP20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
+    features.push(Features.MINTABLE);
     addBEP20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
+    features.push(Features.LOCKABLE);
     addBEP20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
+    features.push(Features.BATCH_TRANSFERABLE);
     addBEP20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
+
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access
+      ? Accesses.NONE
+      : access == "ownable"
+      ? Accesses.OWNABLE
+      : Accesses.ROLES
+  );
 
   return c;
 }
