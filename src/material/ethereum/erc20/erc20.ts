@@ -5,10 +5,7 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import {
-  Accesses,
-  setAccessControl,
-} from "../../common/access/set-access-control";
+import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC20Burnable } from "./feature/add-erc20-burnable";
 import { addERC20Mintable } from "./feature/add-erc20-mintable";
@@ -19,17 +16,20 @@ import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20Capped } from "./feature/add-erc20-capped";
 import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
-import { setAccess, setFeatures } from "../../common/feature/set-features";
+import {
+  Access,
+  setAccess,
+  setFeatures,
+} from "../../common/feature/set-features";
 
-enum Features {
-  CAPPED = "Feature.CAPPED",
-  PRE_MINT = "Features.PRE_MINT",
-  BURNABLE = "Features.BURNABLE",
-  FREEZABLE = "Features.FREEZABLE",
-  PAUSABLE = "Features.PAUSABLE",
-  MINTABLE = "Features.MINTABLE",
-  LOCKABLE = "Features.LOCKABLE",
-  BATCH_TRANSFERABLE = "Features.BATCH_TRANSFERABLE",
+enum FeatureType {
+  CAPPED = "FeatureType.CAPPED",
+  BURNABLE = "FeatureType.BURNABLE",
+  FREEZABLE = "FeatureType.FREEZABLE",
+  PAUSABLE = "FeatureType.PAUSABLE",
+  MINTABLE = "FeatureType.MINTABLE",
+  LOCKABLE = "FeatureType.LOCKABLE",
+  BATCH_TRANSFERABLE = "FeatureType.BATCH_TRANSFERABLE",
 }
 
 export interface ERC20Options extends CommonOptions {
@@ -110,17 +110,12 @@ export function buildERC20(opts: ERC20Options): Contract {
 
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.metadata.capped) {
-    if (allOpts.metadata.capped != "0") {
-      features.push(Features.CAPPED);
-    }
+  if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
+    features.push([FeatureType.CAPPED]);
     addERC20Capped(c, allOpts.metadata.capped);
   }
 
-  if (allOpts.metadata.premint) {
-    if (allOpts.metadata.premint != "0") {
-      features.push(Features.PRE_MINT);
-    }
+  if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
@@ -136,32 +131,33 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
-    features.push(Features.BURNABLE);
+    features.push([FeatureType.BURNABLE]);
     addERC20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push(Features.FREEZABLE);
+    features.push([FeatureType.FREEZABLE]);
     addERC20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push(Features.PAUSABLE);
+    features.push([FeatureType.PAUSABLE]);
     addERC20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push(Features.MINTABLE);
+    features.push([FeatureType.MINTABLE]);
     addERC20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push(Features.LOCKABLE);
+    features.push([FeatureType.LOCKABLE]);
     addERC20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push(Features.BATCH_TRANSFERABLE);
+    features.push([FeatureType.BATCH_TRANSFERABLE]);
+
     addERC20BatchTransferable(c);
   }
 
@@ -171,12 +167,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   setFeatures(c, features);
   setAccess(
     c,
-    !access
-      ? Accesses.NONE
-      : access == "ownable"
-      ? Accesses.OWNABLE
-      : Accesses.ROLES
+    !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
   );
-
   return c;
 }

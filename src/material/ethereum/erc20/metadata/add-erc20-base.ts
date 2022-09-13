@@ -11,11 +11,6 @@ export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
     },
     [name, symbol]
   );
-  
-  c.addParent({
-    name: "ERC20Feature",
-    path: `${pathPrefix}/ethereum/erc20/ERC20Feature.sol`,
-  });
 
   c.addOverride("ERC20", functions._beforeTokenTransfer);
   c.addOverride("ERC20", functions._afterTokenTransfer);

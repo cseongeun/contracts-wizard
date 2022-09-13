@@ -5,11 +5,7 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { defineFunctions } from "../../../utils/define-functions";
-import {
-  Accesses,
-  setAccessControl,
-} from "../../common/access/set-access-control";
+import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addKIP37Burnable } from "./feature/add-kip37-burnable";
 import { addKIP37Mintable } from "./feature/add-kip37-mintable";
@@ -19,15 +15,6 @@ import { addKIP37Base } from "./metadata/add-kip37-base";
 import { addKIP37URI } from "./metadata/add-kip37-uri";
 import { addKIP37Freezable } from "./feature/add-kip37-freezable";
 import { setAccess, setFeatures } from "../../common/feature/set-features";
-
-enum Features {
-  URI = "Features.URI",
-  PAUSABLE = "Features.PAUSABLE",
-  FREEZABLE = "Features.FREEZABLE",
-  BURNABLE = "Features.BURNABLE",
-  MINTABLE = "Features.MINTABLE",
-  SUPPLY = "Features.SUPPLY",
-}
 
 export interface KIP37Options extends CommonOptions {
   metadata: {
@@ -97,52 +84,35 @@ export function buildKIP37(opts: KIP37Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
-  const features = [];
 
   addKIP37Base(c, allOpts.metadata.uri);
 
   if (allOpts.features.updatableUri) {
-    features.push(Features.URI);
     addKIP37URI(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push(Features.PAUSABLE);
     addKIP37Pausable(c, access);
   }
 
   if (allOpts.features.freezable) {
-    features.push(Features.FREEZABLE);
     addKIP37Freezable(c, access);
   }
 
   if (allOpts.features.burnable) {
-    features.push(Features.BURNABLE);
     addKIP37Burnable(c);
   }
 
   if (allOpts.features.mintable) {
-    features.push(Features.MINTABLE);
     addKIP37Mintable(c, access);
   }
 
   if (allOpts.features.supply) {
-    features.push(Features.SUPPLY);
     addKIP37Supply(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
-
-  setFeatures(c, features);
-  setAccess(
-    c,
-    !access
-      ? Accesses.NONE
-      : access == "ownable"
-      ? Accesses.OWNABLE
-      : Accesses.ROLES
-  );
 
   return c;
 }
