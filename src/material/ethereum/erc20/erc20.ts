@@ -111,7 +111,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
-    features.push([CAPPED]);
+    features.push([FeatureType.CAPPED]);
     addERC20Capped(c, allOpts.metadata.capped);
   }
 
@@ -131,32 +131,32 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
-    features.push([BURNABLE]);
+    features.push([FeatureType.BURNABLE]);
     addERC20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push([FREEZABLE]);
+    features.push([FeatureType.FREEZABLE]);
     addERC20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push([PAUSABLE]);
+    features.push([FeatureType.PAUSABLE]);
     addERC20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push([MINTABLE]);
+    features.push([FeatureType.MINTABLE]);
     addERC20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push([LOCKABLE]);
+    features.push([FeatureType.LOCKABLE]);
     addERC20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push([BATCH_TRANSFERABLE]);
+    features.push([FeatureType.BATCH_TRANSFERABLE]);
 
     addERC20BatchTransferable(c);
   }

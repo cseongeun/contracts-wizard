@@ -111,7 +111,7 @@ export function buildBEP20(opts: BEP20Options): Contract {
   addBEP20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
-    features.push([CAPPED]);
+    features.push([FeatureType.CAPPED]);
     addBEP20Capped(c, allOpts.metadata.capped);
   }
 
@@ -131,32 +131,32 @@ export function buildBEP20(opts: BEP20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
-    features.push([BURNABLE]);
+    features.push([FeatureType.BURNABLE]);
     addBEP20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push([FREEZABLE]);
+    features.push([FeatureType.FREEZABLE]);
     addBEP20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push([PAUSABLE]);
+    features.push([FeatureType.PAUSABLE]);
     addBEP20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push([MINTABLE]);
+    features.push([FeatureType.MINTABLE]);
     addBEP20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push([LOCKABLE]);
+    features.push([FeatureType.LOCKABLE]);
     addBEP20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push([BATCH_TRANSFERABLE]);
+    features.push([FeatureType.BATCH_TRANSFERABLE]);
     addBEP20BatchTransferable(c);
   }
 
