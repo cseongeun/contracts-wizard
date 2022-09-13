@@ -13,7 +13,7 @@ export function setFeatures(c: ContractBuilder, features: any[]) {
     );
 
     features.map((feature: any, index: number) => {
-      c.addConstructorCode(`_features[${index}] = ${feature};`);
+      c.addConstructorCode(`_features[${index}] = FeatureType.${feature};`);
     });
 
     c.addConstructorCode(`_setFeatures(_features);`);
