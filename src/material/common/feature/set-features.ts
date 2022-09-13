@@ -8,7 +8,15 @@ export enum Access {
 
 export function setFeatures(c: ContractBuilder, features: any[]) {
   if (features.length > 0) {
-    c.addConstructorCode(`_setFeatures([${features}]);`);
+    c.addConstructorCode(
+      `FeatureType[] memory _features = new Features[](${features.length})`
+    );
+
+    features.map((feature: any, index: number) => {
+      c.addConstructorCode(`_features[${index}] = ${feature}`);
+    });
+
+    c.addConstructorCode(`_setFeatures(_features);`);
   }
 }
 
