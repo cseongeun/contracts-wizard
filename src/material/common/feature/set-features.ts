@@ -1,9 +1,9 @@
 import { ContractBuilder } from "../../../utils/contract";
 
 export enum Access {
-  NONE = "ACCESS.NONE",
-  OWNABLE = "ACCESS.OWNABLE",
-  ROLES = "ACCESS.ROLES",
+  NONE = "Access.NONE",
+  OWNABLE = "Access.OWNABLE",
+  ROLES = "Access.ROLES",
 }
 
 export function setFeatures(c: ContractBuilder, features: any[]) {
