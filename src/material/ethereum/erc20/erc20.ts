@@ -164,10 +164,10 @@ export function buildERC20(opts: ERC20Options): Contract {
   setAccessControl(c, access);
   setInformation(c, info);
 
-  setFeatures(c, features);
   setAccess(
     c,
     !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
   );
+  setFeatures(c, features);
   return c;
 }
