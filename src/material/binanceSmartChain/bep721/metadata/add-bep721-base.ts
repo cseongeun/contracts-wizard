@@ -16,11 +16,6 @@ export function addBEP721Base(
     [name, symbol]
   );
 
-  c.addParent({
-    name: "BEP721Feature",
-    path: `${pathPrefix}/binanceSmartChain/bep721/BEP721Feature.sol`,
-  });
-
   c.addOverride("BEP721", functions._beforeTokenTransfer);
   c.addOverride("BEP721", functions._afterTokenTransfer);
   c.addOverride("BEP721", functions._burn);

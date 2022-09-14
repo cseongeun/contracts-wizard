@@ -53,6 +53,24 @@ import {
   isAccessControlRequired as bep1155IsAccessControlRequired,
   BEP1155Options,
 } from "../material/binanceSmartChain/bep1155/bep1155";
+import {
+  printERC20 as polygonPrintERC20,
+  defaults as polygonErc20defaults,
+  isAccessControlRequired as polygonErc20IsAccessControlRequired,
+  ERC20Options as PolygonERC20Options,
+} from "../material/polygon/erc20/erc20";
+import {
+  printERC721 as polygonPrintERC721,
+  defaults as polygonErc721defaults,
+  isAccessControlRequired as polygonErc721IsAccessControlRequired,
+  ERC721Options as PolygonERC721Options,
+} from "../material/polygon/erc721/erc721";
+import {
+  printERC1155 as polygonPrintERC1155,
+  defaults as polygonErc1155defaults,
+  isAccessControlRequired as polygonErc1155IsAccessControlRequired,
+  ERC1155Options as PolygonERC1155Options,
+} from "../material/polygon/erc1155/erc1155";
 
 export interface WizardContractAPI<Options extends CommonOptions> {
   print: (opts?: Options) => string;
@@ -69,6 +87,9 @@ export type KIP37 = WizardContractAPI<KIP37Options>;
 export type BEP20 = WizardContractAPI<BEP20Options>;
 export type BEP721 = WizardContractAPI<BEP721Options>;
 export type BEP1155 = WizardContractAPI<BEP1155Options>;
+export type Polygon_ERC20 = WizardContractAPI<PolygonERC20Options>;
+export type Polygon_ERC721 = WizardContractAPI<PolygonERC721Options>;
+export type Polygon_ERC1155 = WizardContractAPI<PolygonERC1155Options>;
 
 export const erc20: ERC20 = {
   print: printERC20,
@@ -100,7 +121,6 @@ export const kip37: KIP37 = {
   defaults: kip37defaults,
   isAccessControlRequired: kip37IsAccessControlRequired,
 };
-
 export const bep20: BEP20 = {
   print: printBEP20,
   defaults: bep20defaults,
@@ -115,4 +135,19 @@ export const bep1155: BEP1155 = {
   print: printBEP1155,
   defaults: bep1155defaults,
   isAccessControlRequired: bep1155IsAccessControlRequired,
+};
+export const polygon_erc20: Polygon_ERC20 = {
+  print: polygonPrintERC20,
+  defaults: polygonErc20defaults,
+  isAccessControlRequired: polygonErc20IsAccessControlRequired,
+};
+export const polygon_erc721: Polygon_ERC721 = {
+  print: polygonPrintERC721,
+  defaults: polygonErc721defaults,
+  isAccessControlRequired: polygonErc721IsAccessControlRequired,
+};
+export const polygon_erc1155: Polygon_ERC1155 = {
+  print: polygonPrintERC1155,
+  defaults: polygonErc1155defaults,
+  isAccessControlRequired: polygonErc1155IsAccessControlRequired,
 };
