@@ -37,6 +37,7 @@ export interface ERC20Options extends CommonOptions {
     name: string;
     symbol: string;
     premint?: string;
+    premintAddress?: string;
     capped?: string;
   };
   features: {
@@ -54,6 +55,7 @@ export const defaults: Required<ERC20Options> = {
     name: "MyToken",
     symbol: "MTK",
     premint: "0",
+    premintAddress: "msg.sender",
     capped: "0",
   },
   features: {
@@ -74,6 +76,8 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
       name: opts.metadata.name ?? defaults.metadata.name,
       symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
       premint: opts.metadata.premint ?? defaults.metadata.premint,
+      premintAddress:
+        opts.metadata.premintAddress ?? defaults.metadata.premintAddress,
       capped: opts.metadata.capped ?? defaults.metadata.capped,
     },
     features: {
@@ -121,12 +125,24 @@ export function buildERC20(opts: ERC20Options): Contract {
         parseInt(allOpts.metadata.premint) >
         parseInt(allOpts.metadata.capped as string)
       ) {
-        addERC20Premint(c, allOpts.metadata.capped as string);
+        addERC20Premint(
+          c,
+          allOpts.metadata.capped as string,
+          allOpts.metadata.premintAddress as string
+        );
       } else {
-        addERC20Premint(c, allOpts.metadata.premint);
+        addERC20Premint(
+          c,
+          allOpts.metadata.premint,
+          allOpts.metadata.premintAddress as string
+        );
       }
     } else {
-      addERC20Premint(c, allOpts.metadata.premint);
+      addERC20Premint(
+        c,
+        allOpts.metadata.premint,
+        allOpts.metadata.premintAddress as string
+      );
     }
   }
 

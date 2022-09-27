@@ -22,6 +22,7 @@ export interface KIP7Options extends CommonOptions {
     name: string;
     symbol: string;
     premint?: string;
+    premintAddress?: string;
     capped?: string;
   };
   features: {
@@ -39,6 +40,7 @@ export const defaults: Required<KIP7Options> = {
     name: "MyToken",
     symbol: "MTK",
     premint: "0",
+    premintAddress: "msg.sender",
     capped: "0",
   },
   features: {
@@ -59,6 +61,8 @@ function withDefaults(opts: KIP7Options): Required<KIP7Options> {
       name: opts.metadata.name || defaults.metadata.name,
       symbol: opts.metadata.symbol || defaults.metadata.symbol,
       premint: opts.metadata.premint || defaults.metadata.premint,
+      premintAddress:
+        opts.metadata.premintAddress ?? defaults.metadata.premintAddress,
       capped: opts.metadata.capped ?? defaults.metadata.capped,
     },
     features: {
@@ -98,18 +102,30 @@ export function buildKIP7(opts: KIP7Options): Contract {
     addKIP7Capped(c, allOpts.metadata.capped);
   }
 
-  if (allOpts.metadata.premint) {
+  if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
         parseInt(allOpts.metadata.capped as string)
       ) {
-        addKIP7Premint(c, allOpts.metadata.capped as string);
+        addKIP7Premint(
+          c,
+          allOpts.metadata.capped as string,
+          allOpts.metadata.premintAddress as string
+        );
       } else {
-        addKIP7Premint(c, allOpts.metadata.premint);
+        addKIP7Premint(
+          c,
+          allOpts.metadata.premint,
+          allOpts.metadata.premintAddress as string
+        );
       }
     } else {
-      addKIP7Premint(c, allOpts.metadata.premint);
+      addKIP7Premint(
+        c,
+        allOpts.metadata.premint,
+        allOpts.metadata.premintAddress as string
+      );
     }
   }
 
