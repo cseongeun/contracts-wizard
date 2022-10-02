@@ -3,21 +3,21 @@ import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
 
-export function addKIP7Base(c: ContractBuilder, name: string, symbol: string) {
+export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
   c.addParent(
     {
-      name: "KIP7",
-      path: `${pathPrefix}/klaytn/kip7/KIP7.sol`,
+      name: "ERC20",
+      path: `${pathPrefix}/polygon/erc20/ERC20.sol`,
     },
     [name, symbol]
   );
 
-  c.addOverride("KIP7", functions._beforeTokenTransfer);
-  c.addOverride("KIP7", functions._afterTokenTransfer);
-  c.addOverride("KIP7", functions._mint);
-  c.addOverride("KIP7", functions._burn);
-  c.addOverride("KIP7", functions.balanceOf);
-  c.addOverride("KIP7", supportsInterface);
+  c.addOverride("ERC20", functions._beforeTokenTransfer);
+  c.addOverride("ERC20", functions._afterTokenTransfer);
+  c.addOverride("ERC20", functions._mint);
+  c.addOverride("ERC20", functions._burn);
+  c.addOverride("ERC20", functions.balanceOf);
+  c.addOverride("ERC20", supportsInterface);
 }
 
 const functions = defineFunctions({

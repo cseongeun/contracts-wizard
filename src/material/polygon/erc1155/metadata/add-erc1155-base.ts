@@ -7,7 +7,7 @@ export function addERC1155Base(c: ContractBuilder, uri: string) {
   c.addParent(
     {
       name: "ERC1155",
-      path: `${pathPrefix}/ethereum/erc1155/ERC1155.sol`,
+      path: `${pathPrefix}/polygon/erc1155/ERC1155.sol`,
     },
     [uri]
   );

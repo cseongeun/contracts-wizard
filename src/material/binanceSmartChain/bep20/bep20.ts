@@ -5,10 +5,7 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import {
-  Accesses,
-  setAccessControl,
-} from "../../common/access/set-access-control";
+import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addBEP20Burnable } from "./feature/add-bep20-burnable";
 import { addBEP20Mintable } from "./feature/add-bep20-mintable";
@@ -19,17 +16,20 @@ import { addBEP20Lockable } from "./feature/add-bep20-lockable";
 import { addBEP20Freezable } from "./feature/add-bep20-freezable";
 import { addBEP20Capped } from "./feature/add-bep20-capped";
 import { addBEP20BatchTransferable } from "./feature/add-bep20-batchTransferable";
-import { setAccess, setFeatures } from "../../common/feature/set-features";
+import {
+  Access,
+  setAccess,
+  setFeatures,
+} from "../../common/feature/set-features";
 
-enum Features {
-  CAPPED = "Features.CAPPED",
-  PRE_MINT = "Features.PRE_MINT",
-  BURNABLE = "Features.BURNABLE",
-  FREEZABLE = "Features.FREEZABLE",
-  PAUSABLE = "Features.PAUSABLE",
-  MINTABLE = "Features.MINTABLE",
-  LOCKABLE = "Features.LOCKABLE",
-  BATCH_TRANSFERABLE = "Features.BATCH_TRANSFERABLE",
+enum FeatureType {
+  CAPPED = "CAPPED",
+  BURNABLE = "BURNABLE",
+  FREEZABLE = "FREEZABLE",
+  PAUSABLE = "PAUSABLE",
+  MINTABLE = "MINTABLE",
+  LOCKABLE = "LOCKABLE",
+  BATCH_TRANSFERABLE = "BATCH_TRANSFERABLE",
 }
 
 export interface BEP20Options extends CommonOptions {
@@ -37,6 +37,7 @@ export interface BEP20Options extends CommonOptions {
     name: string;
     symbol: string;
     premint?: string;
+    premintAddress?: string;
     capped?: string;
   };
   features: {
@@ -54,6 +55,7 @@ export const defaults: Required<BEP20Options> = {
     name: "MyToken",
     symbol: "MTK",
     premint: "0",
+    premintAddress: "msg.sender",
     capped: "0",
   },
   features: {
@@ -74,6 +76,8 @@ function withDefaults(opts: BEP20Options): Required<BEP20Options> {
       name: opts.metadata.name ?? defaults.metadata.name,
       symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
       premint: opts.metadata.premint ?? defaults.metadata.premint,
+      premintAddress:
+        opts.metadata.premintAddress ?? defaults.metadata.premintAddress,
       capped: opts.metadata.capped ?? defaults.metadata.capped,
     },
     features: {
@@ -110,74 +114,76 @@ export function buildBEP20(opts: BEP20Options): Contract {
 
   addBEP20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.metadata.capped) {
-    if (allOpts.metadata.capped != "0") {
-      features.push(Features.CAPPED);
-    }
+  if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
+    features.push([FeatureType.CAPPED]);
     addBEP20Capped(c, allOpts.metadata.capped);
   }
 
-  if (allOpts.metadata.premint) {
-    if (allOpts.metadata.premint != "0") {
-      features.push(Features.PRE_MINT);
-    }
-
+  if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
     if (allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
         parseInt(allOpts.metadata.capped as string)
       ) {
-        addBEP20Premint(c, allOpts.metadata.capped as string);
+        addBEP20Premint(
+          c,
+          allOpts.metadata.capped as string,
+          allOpts.metadata.premintAddress as string
+        );
       } else {
-        addBEP20Premint(c, allOpts.metadata.premint);
+        addBEP20Premint(
+          c,
+          allOpts.metadata.premint,
+          allOpts.metadata.premintAddress as string
+        );
       }
     } else {
-      addBEP20Premint(c, allOpts.metadata.premint);
+      addBEP20Premint(
+        c,
+        allOpts.metadata.premint,
+        allOpts.metadata.premintAddress as string
+      );
     }
   }
 
   if (allOpts.features.burnable) {
-    features.push(Features.BURNABLE);
+    features.push([FeatureType.BURNABLE]);
     addBEP20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push(Features.FREEZABLE);
+    features.push([FeatureType.FREEZABLE]);
     addBEP20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push(Features.PAUSABLE);
+    features.push([FeatureType.PAUSABLE]);
     addBEP20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push(Features.MINTABLE);
+    features.push([FeatureType.MINTABLE]);
     addBEP20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push(Features.LOCKABLE);
+    features.push([FeatureType.LOCKABLE]);
     addBEP20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push(Features.BATCH_TRANSFERABLE);
+    features.push([FeatureType.BATCH_TRANSFERABLE]);
     addBEP20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
 
-  setFeatures(c, features);
   setAccess(
     c,
-    !access
-      ? Accesses.NONE
-      : access == "ownable"
-      ? Accesses.OWNABLE
-      : Accesses.ROLES
+    !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
   );
+  setFeatures(c, features);
 
   return c;
 }

@@ -2,12 +2,6 @@ import type { ContractBuilder, BaseFunction } from "../../../utils/contract";
 import { supportsInterface } from "../../../utils/common-functions";
 import { pathPrefix } from "../../../utils/sourcecode";
 
-export enum Accesses {
-  NONE = "Access.NONE",
-  OWNABLE = "Access.OWNABLE",
-  ROLES = "Access.ROLES",
-}
-
 export const accessOptions = [false, "ownable", "roles"] as const;
 
 export type Access = typeof accessOptions[number];
