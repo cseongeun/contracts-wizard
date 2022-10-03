@@ -15,6 +15,7 @@ import { addERC721URIStorage } from "./feature/add-erc721-uriStorage";
 import { addERC721Base } from "./metadata/add-erc721-base";
 import { addERC721BaseURI } from "./metadata/add-erc721-baseURI";
 import { setAccess, setFeatures } from "../../common/feature/set-features";
+import { addERC721Freezable } from "./feature/add-erc721-freezable";
 
 export interface ERC721Options extends CommonOptions {
   metadata: {
@@ -29,6 +30,7 @@ export interface ERC721Options extends CommonOptions {
     pausable?: boolean;
     mintable?: boolean;
     autoIncrementId?: boolean;
+    freezable?: boolean;
   };
 }
 
@@ -45,6 +47,7 @@ export const defaults: Required<ERC721Options> = {
     pausable: false,
     mintable: false,
     autoIncrementId: false,
+    freezable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -65,6 +68,7 @@ function withDefaults(opts: ERC721Options): Required<ERC721Options> {
       mintable: opts.features.mintable ?? defaults.features.mintable,
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
     },
     ...withCommonDefaults(opts),
   };
@@ -93,6 +97,10 @@ export function buildERC721(opts: ERC721Options): Contract {
 
   if (allOpts.features.enumerable) {
     addERC721Enumerable(c);
+  }
+
+  if (allOpts.features.freezable) {
+    addERC721Freezable(c, access);
   }
 
   if (allOpts.features.uriStorage) {

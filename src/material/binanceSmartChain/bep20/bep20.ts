@@ -18,19 +18,10 @@ import { addBEP20Capped } from "./feature/add-bep20-capped";
 import { addBEP20BatchTransferable } from "./feature/add-bep20-batchTransferable";
 import {
   Access,
+  ERC20TypeFeatureType,
   setAccess,
   setFeatures,
 } from "../../common/feature/set-features";
-
-enum FeatureType {
-  CAPPED = "CAPPED",
-  BURNABLE = "BURNABLE",
-  FREEZABLE = "FREEZABLE",
-  PAUSABLE = "PAUSABLE",
-  MINTABLE = "MINTABLE",
-  LOCKABLE = "LOCKABLE",
-  BATCH_TRANSFERABLE = "BATCH_TRANSFERABLE",
-}
 
 export interface BEP20Options extends CommonOptions {
   metadata: {
@@ -115,7 +106,7 @@ export function buildBEP20(opts: BEP20Options): Contract {
   addBEP20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
-    features.push([FeatureType.CAPPED]);
+    features.push([ERC20TypeFeatureType.CAPPED]);
     addBEP20Capped(c, allOpts.metadata.capped);
   }
 
@@ -147,43 +138,43 @@ export function buildBEP20(opts: BEP20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
-    features.push([FeatureType.BURNABLE]);
+    features.push([ERC20TypeFeatureType.BURNABLE]);
     addBEP20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push([FeatureType.FREEZABLE]);
+    features.push([ERC20TypeFeatureType.FREEZABLE]);
     addBEP20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push([FeatureType.PAUSABLE]);
+    features.push([ERC20TypeFeatureType.PAUSABLE]);
     addBEP20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push([FeatureType.MINTABLE]);
+    features.push([ERC20TypeFeatureType.MINTABLE]);
     addBEP20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push([FeatureType.LOCKABLE]);
+    features.push([ERC20TypeFeatureType.LOCKABLE]);
     addBEP20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push([FeatureType.BATCH_TRANSFERABLE]);
+    features.push([ERC20TypeFeatureType.BATCH_TRANSFERABLE]);
     addBEP20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
 
+  setFeatures(c, features);
   setAccess(
     c,
     !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
   );
-  setFeatures(c, features);
 
   return c;
 }

@@ -15,6 +15,7 @@ import { addBEP721URIStorage } from "./feature/add-bep721-uriStorage";
 import { addBEP721Base } from "./metadata/add-bep721-base";
 import { addBEP721BaseURI } from "./metadata/add-bep721-baseURI";
 import { setAccess, setFeatures } from "../../common/feature/set-features";
+import { addBEP721Freezable } from "./feature/add-bep721-freezable";
 
 export interface BEP721Options extends CommonOptions {
   metadata: {
@@ -29,6 +30,7 @@ export interface BEP721Options extends CommonOptions {
     pausable?: boolean;
     mintable?: boolean;
     autoIncrementId?: boolean;
+    freezable?: boolean;
   };
 }
 
@@ -45,6 +47,7 @@ export const defaults: Required<BEP721Options> = {
     pausable: false,
     mintable: false,
     autoIncrementId: false,
+    freezable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -65,6 +68,7 @@ function withDefaults(opts: BEP721Options): Required<BEP721Options> {
       mintable: opts.features.mintable ?? defaults.features.mintable,
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
     },
     ...withCommonDefaults(opts),
   };
@@ -93,6 +97,10 @@ export function buildBEP721(opts: BEP721Options): Contract {
 
   if (allOpts.features.enumerable) {
     addBEP721Enumerable(c);
+  }
+
+  if (allOpts.features.freezable) {
+    addBEP721Freezable(c, access);
   }
 
   if (allOpts.features.uriStorage) {

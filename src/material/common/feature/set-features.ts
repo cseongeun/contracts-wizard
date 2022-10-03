@@ -1,5 +1,15 @@
 import { ContractBuilder } from "../../../utils/contract";
 
+export enum ERC20TypeFeatureType {
+  CAPPED = "CAPPED",
+  BURNABLE = "BURNABLE",
+  FREEZABLE = "FREEZABLE",
+  PAUSABLE = "PAUSABLE",
+  MINTABLE = "MINTABLE",
+  LOCKABLE = "LOCKABLE",
+  BATCH_TRANSFERABLE = "BATCH_TRANSFERABLE",
+}
+
 export enum Access {
   NONE = "Access.NONE",
   OWNABLE = "Access.OWNABLE",

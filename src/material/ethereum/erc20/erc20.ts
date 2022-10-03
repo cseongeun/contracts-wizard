@@ -18,19 +18,10 @@ import { addERC20Capped } from "./feature/add-erc20-capped";
 import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
 import {
   Access,
+  ERC20TypeFeatureType,
   setAccess,
   setFeatures,
 } from "../../common/feature/set-features";
-
-enum FeatureType {
-  CAPPED = "CAPPED",
-  BURNABLE = "BURNABLE",
-  FREEZABLE = "FREEZABLE",
-  PAUSABLE = "PAUSABLE",
-  MINTABLE = "MINTABLE",
-  LOCKABLE = "LOCKABLE",
-  BATCH_TRANSFERABLE = "BATCH_TRANSFERABLE",
-}
 
 export interface ERC20Options extends CommonOptions {
   metadata: {
@@ -115,7 +106,7 @@ export function buildERC20(opts: ERC20Options): Contract {
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
   if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
-    features.push([FeatureType.CAPPED]);
+    features.push([ERC20TypeFeatureType.CAPPED]);
     addERC20Capped(c, allOpts.metadata.capped);
   }
 
@@ -147,43 +138,42 @@ export function buildERC20(opts: ERC20Options): Contract {
   }
 
   if (allOpts.features.burnable) {
-    features.push([FeatureType.BURNABLE]);
+    features.push([ERC20TypeFeatureType.BURNABLE]);
     addERC20Burnable(c);
   }
 
   if (allOpts.features.freezable) {
-    features.push([FeatureType.FREEZABLE]);
+    features.push([ERC20TypeFeatureType.FREEZABLE]);
     addERC20Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
-    features.push([FeatureType.PAUSABLE]);
+    features.push([ERC20TypeFeatureType.PAUSABLE]);
     addERC20Pausable(c, access);
   }
 
   if (allOpts.features.mintable) {
-    features.push([FeatureType.MINTABLE]);
+    features.push([ERC20TypeFeatureType.MINTABLE]);
     addERC20Mintable(c, access);
   }
 
   if (allOpts.features.lockable) {
-    features.push([FeatureType.LOCKABLE]);
+    features.push([ERC20TypeFeatureType.LOCKABLE]);
     addERC20Lockable(c, access);
   }
 
   if (allOpts.features.batchTransferable) {
-    features.push([FeatureType.BATCH_TRANSFERABLE]);
-
+    features.push([ERC20TypeFeatureType.BATCH_TRANSFERABLE]);
     addERC20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
   setInformation(c, info);
 
+  setFeatures(c, features);
   setAccess(
     c,
     !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
   );
-  setFeatures(c, features);
   return c;
 }

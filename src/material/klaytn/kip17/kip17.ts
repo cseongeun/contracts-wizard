@@ -6,9 +6,11 @@ import {
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
 import { setAccessControl } from "../../common/access/set-access-control";
+import { setAccess, setFeatures } from "../../common/feature/set-features";
 import { setInformation } from "../../common/information/set-info";
 import { addKIP17Burnable } from "./feature/add-kip17-burnable";
 import { addKIP17Enumerable } from "./feature/add-kip17-enumerable";
+import { addKIP17Freezable } from "./feature/add-kip17-freezable";
 import { addKIP17Mintable } from "./feature/add-kip17-mintable";
 import { addKIP17Pausable } from "./feature/add-kip17-pausable";
 import { addKIP17URIStorage } from "./feature/add-kip17-uriStorage";
@@ -28,6 +30,7 @@ export interface KIP17Options extends CommonOptions {
     pausable?: boolean;
     mintable?: boolean;
     autoIncrementId?: boolean;
+    freezable?: boolean;
   };
 }
 
@@ -44,6 +47,7 @@ export const defaults: Required<KIP17Options> = {
     pausable: false,
     mintable: false,
     autoIncrementId: false,
+    freezable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -64,6 +68,7 @@ function withDefaults(opts: KIP17Options): Required<KIP17Options> {
       mintable: opts.features.mintable ?? defaults.features.mintable,
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
+      freezable: opts.features.freezable ?? defaults.features.freezable,
     },
     ...withCommonDefaults(opts),
   };
@@ -94,6 +99,10 @@ export function buildKIP17(opts: KIP17Options): Contract {
     addKIP17Enumerable(c);
   }
 
+  if (allOpts.features.freezable) {
+    addKIP17Freezable(c, access);
+  }
+
   if (allOpts.features.uriStorage) {
     addKIP17URIStorage(c);
   }
@@ -118,5 +127,10 @@ export function buildKIP17(opts: KIP17Options): Contract {
   setAccessControl(c, access);
   setInformation(c, info);
 
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
+  );
   return c;
 }
