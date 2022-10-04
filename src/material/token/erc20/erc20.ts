@@ -27,41 +27,52 @@ export interface ERC20Options extends CommonOptions {
   network: NetworkType;
   metadata: {
     name: {
+      view: string;
       value: string;
     };
     symbol: {
+      view: string;
       value: string;
     };
     initialMint: {
+      view: string;
       value: string;
     };
     initialMintAddress: {
+      view: string;
       value: string;
     };
   };
   features: {
     mintable?: {
+      view: string;
       select: boolean;
       next: {
         cappable?: {
+          view: string;
           select: boolean;
           value: string;
         };
       };
     };
     burnable?: {
+      view: string;
       select: boolean;
     };
     freezable?: {
+      view: string;
       select: boolean;
     };
     lockable?: {
+      view: string;
       select: boolean;
     };
     pausable?: {
+      view: string;
       select: boolean;
     };
     batchTransferable?: {
+      view: string;
       select: boolean;
     };
   };
@@ -71,41 +82,52 @@ export const defaults: Required<ERC20Options> = {
   network: NetworkType.ETHEREUM,
   metadata: {
     name: {
+      view: "Token Name",
       value: "MyToken",
     },
     symbol: {
+      view: "Token Symbol",
       value: "MTK",
     },
     initialMint: {
+      view: "Initial Minting Amount ",
       value: "0",
     },
     initialMintAddress: {
-      value: "msg.value",
+      view: "Initail Receive Address",
+      value: "msg.sender",
     },
   },
   features: {
     mintable: {
+      view: "Can Mint",
       select: false,
       next: {
         cappable: {
+          view: "Has Cap",
           select: false,
           value: "0",
         },
       },
     },
     burnable: {
+      view: "Can Burn",
       select: false,
     },
     freezable: {
+      view: "Can Freeze",
       select: false,
     },
     lockable: {
+      view: "Can LockUp",
       select: false,
     },
     pausable: {
+      view: "Can Pause",
       select: false,
     },
     batchTransferable: {
+      view: "Can Batch Transfer",
       select: false,
     },
   },
