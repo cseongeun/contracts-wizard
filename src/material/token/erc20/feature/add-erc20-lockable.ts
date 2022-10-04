@@ -10,9 +10,8 @@ import { supportsInterface } from "../../../../utils/common-functions";
 export function addERC20Lockable(c: ContractBuilder, access: Access) {
   c.addParent(ERC20_LOCKABLE);
 
-  // c.addOverride(ERC20_LOCKABLE.name, functions.balanceOf);
+  c.addOverride(ERC20_LOCKABLE.name, functions.balanceOf);
   c.addOverride(ERC20_LOCKABLE.name, functions._beforeTokenTransfer);
-  c.addOverride(ERC20_LOCKABLE.name, supportsInterface);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
   c.addFunctionCode("_lock(account, amount, reason, release);", functions.lock);

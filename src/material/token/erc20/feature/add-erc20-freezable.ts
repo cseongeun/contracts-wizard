@@ -11,7 +11,6 @@ export function addERC20Freezable(c: ContractBuilder, access: Access) {
   c.addParent(ERC20_FREEZABLE);
 
   c.addOverride(ERC20_FREEZABLE.name, functions._beforeTokenTransfer);
-  c.addOverride(ERC20_FREEZABLE.name, supportsInterface);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
   c.addFunctionCode("_freeze(account);", functions.freeze);

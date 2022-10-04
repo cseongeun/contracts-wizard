@@ -11,7 +11,6 @@ export function addERC20Pausable(c: ContractBuilder, access: Access) {
   c.addParent(ERC20_PAUSABLE);
 
   c.addOverride(ERC20_PAUSABLE.name, functions._beforeTokenTransfer);
-  c.addOverride(ERC20_PAUSABLE.name, supportsInterface);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");
   c.addFunctionCode("_pause();", functions.pause);

@@ -4,5 +4,4 @@ import { ERC20_BATCH_TRANSFERABLE } from "../../../path/erc20-path";
 
 export function addERC20BatchTransferable(c: ContractBuilder) {
   c.addParent(ERC20_BATCH_TRANSFERABLE);
-  c.addOverride(ERC20_BATCH_TRANSFERABLE.name, supportsInterface);
 }
