@@ -1,3 +1,4 @@
+import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import {
@@ -10,6 +11,7 @@ export function addERC20Freezable(c: ContractBuilder, access: Access) {
   c.addParent(ERC20_FREEZABLE);
 
   c.addOverride(ERC20_FREEZABLE.name, functions._beforeTokenTransfer);
+  c.addOverride(ERC20_FREEZABLE.name, supportsInterface);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
   c.addFunctionCode("_freeze(account);", functions.freeze);

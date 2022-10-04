@@ -1,3 +1,4 @@
+import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { ERC20_CAPPABLE } from "../../../path/erc20-path";
@@ -23,7 +24,8 @@ export function addERC20Cappable(c: ContractBuilder, amount: string) {
 
       c.addConstructorCode(`_setCap(${units} * 10 ** ${exp});`);
 
-      c.addOverride("ERC20Capped", functions._mint);
+      c.addOverride(ERC20_CAPPABLE.name, functions._mint);
+      c.addOverride(ERC20_CAPPABLE.name, supportsInterface);
     }
   }
 }
