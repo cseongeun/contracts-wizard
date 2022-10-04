@@ -1,18 +1,15 @@
-import type { ContractBuilder, BaseFunction } from "../../../../utils/contract";
+import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC20_FREEZABLE } from "../path";
 
 export function addERC20Freezable(c: ContractBuilder, access: Access) {
-  c.addParent({
-    name: "ERC20Freezable",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Freezable.sol`,
-  });
+  c.addParent(ERC20_FREEZABLE);
 
-  c.addOverride("ERC20Freezable", functions._beforeTokenTransfer);
+  c.addOverride(ERC20_FREEZABLE.name, functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
   c.addFunctionCode("_freeze(account);", functions.freeze);

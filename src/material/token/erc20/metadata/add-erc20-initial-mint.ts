@@ -2,7 +2,7 @@ import type { ContractBuilder } from "../../../../utils/contract";
 
 export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
-export function addERC20Premint(
+export function addERC20Initialmint(
   c: ContractBuilder,
   amount: string,
   address: string

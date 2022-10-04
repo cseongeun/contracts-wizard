@@ -1,4 +1,4 @@
-import { buildERC20, ERC20Options } from "../material/ethereum/erc20/erc20";
+import { buildERC20, ERC20Options } from "../material/token/erc20/erc20";
 import { buildERC721, ERC721Options } from "../material/ethereum/erc721/erc721";
 import {
   buildERC1155,

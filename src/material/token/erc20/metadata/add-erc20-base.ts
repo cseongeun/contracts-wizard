@@ -1,23 +1,17 @@
 import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC20_DEFAULT } from "../path";
 
 export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
-  c.addParent(
-    {
-      name: "ERC20",
-      path: `${pathPrefix}/ethereum/erc20/ERC20.sol`,
-    },
-    [name, symbol]
-  );
+  c.addParent(ERC20_DEFAULT, [name, symbol]);
 
-  c.addOverride("ERC20", functions._beforeTokenTransfer);
-  c.addOverride("ERC20", functions._afterTokenTransfer);
-  c.addOverride("ERC20", functions._mint);
-  c.addOverride("ERC20", functions._burn);
-  c.addOverride("ERC20", functions.balanceOf);
-  c.addOverride("ERC20", supportsInterface);
+  c.addOverride(ERC20_DEFAULT.name, functions._beforeTokenTransfer);
+  c.addOverride(ERC20_DEFAULT.name, functions._afterTokenTransfer);
+  c.addOverride(ERC20_DEFAULT.name, functions._mint);
+  c.addOverride(ERC20_DEFAULT.name, functions._burn);
+  c.addOverride(ERC20_DEFAULT.name, functions.balanceOf);
+  c.addOverride(ERC20_DEFAULT.name, supportsInterface);
 }
 
 const functions = defineFunctions({

@@ -4,16 +4,13 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC20_LOCKABLE } from "../path";
 
 export function addERC20Lockable(c: ContractBuilder, access: Access) {
-  c.addParent({
-    name: "ERC20Lockable",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Lockable.sol`,
-  });
+  c.addParent(ERC20_LOCKABLE);
 
-  c.addOverride("ERC20Lockable", functions.balanceOf);
-  c.addOverride("ERC20Lockable", functions._beforeTokenTransfer);
+  c.addOverride(ERC20_LOCKABLE.name, functions.balanceOf);
+  c.addOverride(ERC20_LOCKABLE.name, functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.lock, access, "LOCKER");
   c.addFunctionCode("_lock(account, amount, reason, release);", functions.lock);

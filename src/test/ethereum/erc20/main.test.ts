@@ -1,6 +1,6 @@
 import { describe, test } from "@jest/globals";
 import { erc20 } from "../../../generate/api";
-import { buildERC20 } from "../../../material/ethereum/erc20/erc20";
+import { buildERC20 } from "../../../material/token/erc20/erc20";
 
 describe("ERC20", () => {
   test("generate", () => {

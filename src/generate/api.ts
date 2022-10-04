@@ -4,7 +4,7 @@ import {
   defaults as erc20defaults,
   isAccessControlRequired as erc20IsAccessControlRequired,
   ERC20Options,
-} from "../material/ethereum/erc20/erc20";
+} from "../material/token/erc20/erc20";
 import {
   printERC721,
   defaults as erc721defaults,
