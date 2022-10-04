@@ -1,6 +1,6 @@
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { ERC20_CAPPABLE } from "../path";
+import { ERC20_CAPPABLE } from "../../../path/erc20-path";
 
 export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 

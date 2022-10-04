@@ -33,11 +33,3 @@ export const ERC20_CAPPABLE = {
   name: "ERC20Cappable",
   path: `${ERC20_PREFIX}/features/ERC20Cappable.sol`,
 };
-export const ERC20_SAFE_TRANSFERABLE = {
-  name: "ERC20SafeTransferable",
-  path: `${ERC20_PREFIX}/features/ERC20SafeTransferable.sol`,
-};
-export const KIP7_SAFE_TRANSFERABLE = {
-  name: "KIP7SafeTransferable",
-  path: `${ERC20_PREFIX}/features/KIP7SafeTransfersable.sol`,
-};

@@ -1,7 +1,7 @@
 import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { ERC20_DEFAULT } from "../path";
+import { ERC20_DEFAULT } from "../../../path/erc20-path";
 
 export function addERC20Base(c: ContractBuilder, name: string, symbol: string) {
   c.addParent(ERC20_DEFAULT, [name, symbol]);

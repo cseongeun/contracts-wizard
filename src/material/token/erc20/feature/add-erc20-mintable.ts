@@ -4,7 +4,7 @@ import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { ERC20_CAPPABLE } from "../path";
+import { ERC20_CAPPABLE } from "../../../path/erc20-path";
 
 export const pattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 

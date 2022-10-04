@@ -4,7 +4,7 @@ import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { ERC20_FREEZABLE } from "../path";
+import { ERC20_FREEZABLE } from "../../../path/erc20-path";
 
 export function addERC20Freezable(c: ContractBuilder, access: Access) {
   c.addParent(ERC20_FREEZABLE);
