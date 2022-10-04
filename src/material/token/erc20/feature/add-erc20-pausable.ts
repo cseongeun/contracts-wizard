@@ -4,7 +4,6 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
-import { pathPrefix } from "../../../../utils/sourcecode";
 import { ERC20_PAUSABLE } from "../path";
 
 export function addERC20Pausable(c: ContractBuilder, access: Access) {
