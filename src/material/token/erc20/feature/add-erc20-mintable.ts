@@ -8,7 +8,7 @@ import { ERC20_CAPPABLE } from "../path";
 
 export const pattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
-export function addERC20MintableWithCappable(
+export function addERC20Mintable(
   c: ContractBuilder,
   access: Access,
   cappable?: { select: boolean; value: string }

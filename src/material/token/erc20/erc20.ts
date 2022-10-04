@@ -8,10 +8,9 @@ import { printContract } from "../../../utils/print";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC20Burnable } from "./feature/add-erc20-burnable";
-import { addERC20MintableWithCappable } from "./feature/add-erc20-mintable-with-cappable";
+import { addERC20Mintable } from "./feature/add-erc20-mintable";
 import { addERC20Pausable } from "./feature/add-erc20-pausable";
 import { addERC20Base } from "./metadata/add-erc20-base";
-import { addERC20Initialmint } from "./metadata/add-erc20-initial-mint";
 import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
 import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
@@ -21,115 +20,42 @@ import {
   setAccess,
   setFeatures,
 } from "../../common/feature/set-features";
-import { NetworkType } from "../../common/network";
+import { addERC20Cappable } from "./feature/add-erc20-cappable";
+import { addERC20Premint } from "./metadata/add-erc20-pre-mint";
 
 export interface ERC20Options extends CommonOptions {
-  network: NetworkType;
   metadata: {
-    name: {
-      view: string;
-      value: string;
-    };
-    symbol: {
-      view: string;
-      value: string;
-    };
-    initialMint: {
-      view: string;
-      value: string;
-    };
-    initialMintAddress: {
-      view: string;
-      value: string;
-    };
+    name: string;
+    symbol: string;
+    premint?: string;
+    premintAddress?: string;
+    capped?: string;
   };
   features: {
-    mintable?: {
-      view: string;
-      select: boolean;
-      next: {
-        cappable?: {
-          view: string;
-          select: boolean;
-          value: string;
-        };
-      };
-    };
-    burnable?: {
-      view: string;
-      select: boolean;
-    };
-    freezable?: {
-      view: string;
-      select: boolean;
-    };
-    lockable?: {
-      view: string;
-      select: boolean;
-    };
-    pausable?: {
-      view: string;
-      select: boolean;
-    };
-    batchTransferable?: {
-      view: string;
-      select: boolean;
-    };
+    burnable?: boolean;
+    freezable?: boolean;
+    lockable?: boolean;
+    pausable?: boolean;
+    mintable?: boolean;
+    batchTransferable: boolean;
   };
 }
 
 export const defaults: Required<ERC20Options> = {
-  network: NetworkType.ETHEREUM,
   metadata: {
-    name: {
-      view: "Token Name",
-      value: "MyToken",
-    },
-    symbol: {
-      view: "Token Symbol",
-      value: "MTK",
-    },
-    initialMint: {
-      view: "Initial Minting Amount ",
-      value: "0",
-    },
-    initialMintAddress: {
-      view: "Initail Receive Address",
-      value: "msg.sender",
-    },
+    name: "MyToken",
+    symbol: "MTK",
+    premint: "0",
+    premintAddress: "msg.sender",
+    capped: "0",
   },
   features: {
-    mintable: {
-      view: "Can Mint",
-      select: false,
-      next: {
-        cappable: {
-          view: "Has Cap",
-          select: false,
-          value: "0",
-        },
-      },
-    },
-    burnable: {
-      view: "Can Burn",
-      select: false,
-    },
-    freezable: {
-      view: "Can Freeze",
-      select: false,
-    },
-    lockable: {
-      view: "Can LockUp",
-      select: false,
-    },
-    pausable: {
-      view: "Can Pause",
-      select: false,
-    },
-    batchTransferable: {
-      view: "Can Batch Transfer",
-      select: false,
-    },
+    burnable: false,
+    freezable: false,
+    lockable: false,
+    pausable: false,
+    mintable: false,
+    batchTransferable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -137,21 +63,20 @@ export const defaults: Required<ERC20Options> = {
 
 function withDefaults(opts: ERC20Options): Required<ERC20Options> {
   return {
-    network: opts.network ?? defaults.network,
     metadata: {
       name: opts.metadata.name ?? defaults.metadata.name,
       symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
-      initialMint: opts.metadata.initialMint ?? defaults.metadata.initialMint,
-      initialMintAddress:
-        opts.metadata.initialMintAddress ??
-        defaults.metadata.initialMintAddress,
+      premint: opts.metadata.premint ?? defaults.metadata.premint,
+      premintAddress:
+        opts.metadata.premintAddress ?? defaults.metadata.premintAddress,
+      capped: opts.metadata.capped ?? defaults.metadata.capped,
     },
     features: {
-      mintable: opts.features.mintable ?? defaults.features.mintable,
       burnable: opts.features.burnable ?? defaults.features.burnable,
       freezable: opts.features.freezable ?? defaults.features.freezable,
       lockable: opts.features.lockable ?? defaults.features.lockable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
+      mintable: opts.features.mintable ?? defaults.features.mintable,
       batchTransferable:
         opts.features.batchTransferable ?? defaults.features.batchTransferable,
     },
@@ -164,60 +89,80 @@ export function printERC20(opts: ERC20Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<ERC20Options>): boolean {
-  return (opts.features?.mintable?.select ||
-    opts.features?.pausable?.select ||
-    opts.features?.freezable?.select ||
-    opts.features?.lockable?.select) as boolean;
+  return (opts.features?.mintable ||
+    opts.features?.pausable ||
+    opts.features?.freezable ||
+    opts.features?.lockable) as boolean;
 }
 
 export function buildERC20(opts: ERC20Options): Contract {
   const allOpts = withDefaults(opts);
 
-  const c = new ContractBuilder(allOpts.metadata.name.value);
+  const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
   const features = [];
 
-  // Metadata
-  addERC20Base(c, allOpts.metadata.name.value, allOpts.metadata.symbol.value);
+  addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.metadata.initialMint.value != "0") {
-    addERC20Initialmint(
-      c,
-      allOpts.metadata.initialMint.value,
-      allOpts.metadata.initialMintAddress.value
-    );
+  if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
+    features.push([ERC20TypeFeatureType.CAPPED]);
+    addERC20Cappable(c, allOpts.metadata.capped);
   }
 
-  // Features
-  if (allOpts.features.burnable?.select) {
+  if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
+    if (allOpts.metadata.capped != "0") {
+      if (
+        parseInt(allOpts.metadata.premint) >
+        parseInt(allOpts.metadata.capped as string)
+      ) {
+        addERC20Premint(
+          c,
+          allOpts.metadata.capped as string,
+          allOpts.metadata.premintAddress as string
+        );
+      } else {
+        addERC20Premint(
+          c,
+          allOpts.metadata.premint,
+          allOpts.metadata.premintAddress as string
+        );
+      }
+    } else {
+      addERC20Premint(
+        c,
+        allOpts.metadata.premint,
+        allOpts.metadata.premintAddress as string
+      );
+    }
+  }
+
+  if (allOpts.features.burnable) {
     features.push([ERC20TypeFeatureType.BURNABLE]);
     addERC20Burnable(c);
   }
 
-  if (allOpts.features.freezable?.select) {
+  if (allOpts.features.freezable) {
     features.push([ERC20TypeFeatureType.FREEZABLE]);
     addERC20Freezable(c, access);
   }
 
-  if (allOpts.features.pausable?.select) {
+  if (allOpts.features.pausable) {
     features.push([ERC20TypeFeatureType.PAUSABLE]);
     addERC20Pausable(c, access);
   }
 
-  if (allOpts.features.mintable?.select) {
+  if (allOpts.features.mintable) {
     features.push([ERC20TypeFeatureType.MINTABLE]);
-
-    const cappable = allOpts.features.mintable.next.cappable;
-    addERC20MintableWithCappable(c, access, cappable);
+    addERC20Mintable(c, access);
   }
 
-  if (allOpts.features.lockable?.select) {
+  if (allOpts.features.lockable) {
     features.push([ERC20TypeFeatureType.LOCKABLE]);
     addERC20Lockable(c, access);
   }
 
-  if (allOpts.features.batchTransferable?.select) {
+  if (allOpts.features.batchTransferable) {
     features.push([ERC20TypeFeatureType.BATCH_TRANSFERABLE]);
     addERC20BatchTransferable(c);
   }
