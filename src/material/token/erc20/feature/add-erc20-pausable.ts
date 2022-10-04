@@ -4,12 +4,11 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
+import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC20_PAUSABLE } from "../path";
 
 export function addERC20Pausable(c: ContractBuilder, access: Access) {
-  c.addParent({
-    name: "ERC20Pausable",
-    path: `${pathPrefix}/ethereum/erc20/features/ERC20Pausable.sol`,
-  });
+  c.addParent(ERC20_PAUSABLE);
 
   c.addOverride("ERC20Pausable", functions._beforeTokenTransfer);
 

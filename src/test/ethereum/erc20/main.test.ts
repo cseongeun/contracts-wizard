@@ -7,7 +7,6 @@ describe("ERC20", () => {
     const token = erc20;
     const opts = token.defaults;
 
-    opts.features.lockable = true;
     opts.access = "ownable";
     // opts.metadata.capped =/ "100";
     const code = token.print(opts);
