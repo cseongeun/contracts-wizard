@@ -47,7 +47,7 @@ export const defaults: Required<ERC20Options> = {
     symbol: "MTK",
     premint: "0",
     premintAddress: "msg.sender",
-    capped: "0",
+    capped: "∞",
   },
   features: {
     burnable: false,
@@ -105,13 +105,17 @@ export function buildERC20(opts: ERC20Options): Contract {
 
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (allOpts.metadata.capped && allOpts.metadata.capped != "0") {
+  if (
+    allOpts.metadata.capped &&
+    allOpts.metadata.capped != "∞" &&
+    allOpts.metadata.capped != "0"
+  ) {
     features.push([ERC20TypeFeatureType.CAPPED]);
     addERC20Cappable(c, allOpts.metadata.capped);
   }
 
   if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
-    if (allOpts.metadata.capped != "0") {
+    if (allOpts.metadata.capped != "∞" && allOpts.metadata.capped != "0") {
       if (
         parseInt(allOpts.metadata.premint) >
         parseInt(allOpts.metadata.capped as string)

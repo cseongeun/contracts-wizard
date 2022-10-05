@@ -1,13 +1,13 @@
 import type { ContractBuilder } from "../../../../utils/contract";
 
-export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
+export const pattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
 export function addERC20Premint(
   c: ContractBuilder,
   amount: string,
   address: string
 ) {
-  const m = amount.match(premintPattern);
+  const m = amount.match(pattern);
   if (m) {
     const integer = m[1]?.replace(/^0+/, "") ?? "";
     const decimals = m[2]?.replace(/0+$/, "") ?? "";

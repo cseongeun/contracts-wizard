@@ -3,10 +3,10 @@ import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { ERC20_CAPPABLE } from "../../../path/erc20-path";
 
-export const premintPattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
+export const pattern = /^(\d*)(?:\.(\d+))?(?:e(\d+))?$/;
 
 export function addERC20Cappable(c: ContractBuilder, amount: string) {
-  const m = amount.match(premintPattern);
+  const m = amount.match(pattern);
 
   if (m) {
     const integer = m[1]?.replace(/^0+/, "") ?? "";
