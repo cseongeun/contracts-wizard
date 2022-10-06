@@ -1,9 +1,9 @@
 import { describe, test } from "@jest/globals";
-import { erc20, erc721 } from "../../../generate/api";
+import { erc1155, erc20, erc721 } from "../../../generate/api";
 
-describe("ERC721", () => {
+describe("ERC1155", () => {
   test("generate", () => {
-    const token = erc721;
+    const token = erc1155;
 
     const opts = token.defaults;
 

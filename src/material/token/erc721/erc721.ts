@@ -73,7 +73,7 @@ export function printERC721(opts: ERC721Options = defaults): string {
 }
 
 export function isAccessControlRequired(opts: Partial<ERC721Options>): boolean {
-  return opts.features?.pausable as boolean;
+  return true;
 }
 
 export function buildERC721(opts: ERC721Options): Contract {
