@@ -22,6 +22,7 @@ import {
 export interface ERC1155Options extends CommonOptions {
   metadata: {
     name: string;
+    symbol: string;
     baseURI: string;
   };
   features: {
@@ -35,6 +36,7 @@ export interface ERC1155Options extends CommonOptions {
 export const defaults: Required<ERC1155Options> = {
   metadata: {
     name: "MyToken",
+    symbol: "MTK",
     baseURI: "",
   },
   features: {
@@ -51,6 +53,7 @@ function withDefaults(opts: ERC1155Options): Required<ERC1155Options> {
   return {
     metadata: {
       name: opts.metadata.name ?? defaults.metadata.name,
+      symbol: opts.metadata.symbol ?? defaults.metadata.symbol,
       baseURI: opts.metadata.baseURI ?? defaults.metadata.baseURI,
     },
     features: {
@@ -71,9 +74,7 @@ export function printERC1155(opts: ERC1155Options = defaults): string {
 export function isAccessControlRequired(
   opts: Partial<ERC1155Options>
 ): boolean {
-  return (opts.features?.freezable ||
-    opts.features?.pausable) as // opts.features?.uriStoragable
-  boolean;
+  return (opts.features?.freezable || opts.features?.pausable) as boolean; // opts.features?.uriStoragable
 }
 
 export function buildERC1155(opts: ERC1155Options): Contract {
@@ -84,7 +85,13 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   const { access, info } = allOpts;
   const features = [];
 
-  addERC1155Base(c, allOpts.metadata.baseURI, access);
+  addERC1155Base(
+    c,
+    allOpts.metadata.name,
+    allOpts.metadata.symbol,
+    allOpts.metadata.baseURI,
+    access
+  );
 
   if (allOpts.features.burnable) {
     features.push([ERC1155TypeFeatureType.BURNABLE]);

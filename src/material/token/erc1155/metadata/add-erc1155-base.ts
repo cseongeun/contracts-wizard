@@ -12,10 +12,12 @@ import {
 
 export function addERC1155Base(
   c: ContractBuilder,
+  name: string,
+  symbol: string,
   uri: string,
   access: Access
 ) {
-  c.addParent(ERC1155_DEFAULT, [uri]);
+  c.addParent(ERC1155_DEFAULT, [name, symbol, uri]);
 
   c.addOverride(ERC1155_DEFAULT.name, functions._beforeTokenTransfer);
   c.addOverride(ERC1155_DEFAULT.name, supportsInterface);
