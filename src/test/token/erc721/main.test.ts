@@ -7,11 +7,8 @@ describe("ERC721", () => {
 
     const opts = token.defaults;
 
-    opts.features.enumerable = true;
-    opts.features.uriStoragable = true;
     opts.features.burnable = true;
     opts.features.pausable = true;
-    opts.features.mintable = true;
     opts.features.freezable = true;
     opts.features.batchTransferable = true;
 
