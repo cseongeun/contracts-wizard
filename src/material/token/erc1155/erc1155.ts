@@ -27,9 +27,8 @@ export interface ERC1155Options extends CommonOptions {
   features: {
     burnable?: boolean;
     freezable?: boolean;
-    mintable?: boolean;
     pausable?: boolean;
-    uriStoragable?: boolean;
+    // uriStoragable?: boolean;
   };
 }
 
@@ -42,7 +41,7 @@ export const defaults: Required<ERC1155Options> = {
     burnable: false,
     pausable: false,
     freezable: false,
-    uriStoragable: false,
+    // uriStoragable: false,
   },
   access: "ownable",
   info: commonDefaults.info,
@@ -72,10 +71,9 @@ export function printERC1155(opts: ERC1155Options = defaults): string {
 export function isAccessControlRequired(
   opts: Partial<ERC1155Options>
 ): boolean {
-  return (opts.features?.mintable ||
-    opts.features?.freezable ||
-    opts.features?.pausable ||
-    opts.features?.uriStoragable) as boolean;
+  return (opts.features?.freezable ||
+    opts.features?.pausable) as // opts.features?.uriStoragable
+  boolean;
 }
 
 export function buildERC1155(opts: ERC1155Options): Contract {
