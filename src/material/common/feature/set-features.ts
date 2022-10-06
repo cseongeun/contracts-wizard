@@ -20,6 +20,13 @@ export enum ERC721TypeFeatureType {
   BATCH_TRRANSFERABLE = "BATCH_TRRANSFERABLE",
 }
 
+export enum ERC1155TypeFeatureType {
+  PAUSABLE = "PAUSABLE",
+  FREEZABLE = "FREEZABLE",
+  BURNABLE = "BURNABLE",
+  URI_STORAGABLE = "URI_STORAGABLE",
+}
+
 export enum Access {
   NONE = "Access.NONE",
   OWNABLE = "Access.OWNABLE",

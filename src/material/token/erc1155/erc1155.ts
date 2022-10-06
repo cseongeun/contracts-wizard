@@ -5,15 +5,19 @@ import {
 } from "../../../utils/common-options";
 import { Contract, ContractBuilder } from "../../../utils/contract";
 import { printContract } from "../../../utils/print";
-import { defineFunctions } from "../../../utils/define-functions";
 import { setAccessControl } from "../../common/access/set-access-control";
 import { setInformation } from "../../common/information/set-info";
 import { addERC1155Burnable } from "./feature/add-erc1155-burnable";
-import { addERC1155Mintable } from "./feature/add-erc1155-mintable";
 import { addERC1155Pausable } from "./feature/add-erc1155-pausable";
 import { addERC1155Base } from "./metadata/add-erc1155-base";
 import { addERC1155Freezable } from "./feature/add-erc1155-freezable";
 import { addERC1155URIStoragable } from "./feature/add-erc1155-uriStoragable";
+import {
+  Access,
+  ERC1155TypeFeatureType,
+  setAccess,
+  setFeatures,
+} from "../../common/feature/set-features";
 
 export interface ERC1155Options extends CommonOptions {
   metadata: {
@@ -80,18 +84,22 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   const c = new ContractBuilder(allOpts.metadata.name);
 
   const { access, info } = allOpts;
+  const features = [];
 
   addERC1155Base(c, allOpts.metadata.baseURI, access);
 
   if (allOpts.features.burnable) {
+    features.push([ERC1155TypeFeatureType.BURNABLE]);
     addERC1155Burnable(c);
   }
 
   if (allOpts.features.freezable) {
+    features.push([ERC1155TypeFeatureType.FREEZABLE]);
     addERC1155Freezable(c, access);
   }
 
   if (allOpts.features.pausable) {
+    features.push([ERC1155TypeFeatureType.PAUSABLE]);
     addERC1155Pausable(c, access);
   }
 
@@ -102,5 +110,10 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   setAccessControl(c, access);
   setInformation(c, info);
 
+  setFeatures(c, features);
+  setAccess(
+    c,
+    !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES
+  );
   return c;
 }
