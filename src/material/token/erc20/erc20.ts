@@ -20,7 +20,6 @@ import {
   setAccess,
   setFeatures,
 } from "../../common/feature/set-features";
-import { addERC20Cappable } from "./feature/add-erc20-cappable";
 import { addERC20Premint } from "./metadata/add-erc20-pre-mint";
 
 export interface ERC20Options extends CommonOptions {
@@ -29,7 +28,6 @@ export interface ERC20Options extends CommonOptions {
     symbol: string;
     premint?: string;
     premintAddress?: string;
-    capped?: string;
   };
   features: {
     burnable?: boolean;
@@ -47,7 +45,6 @@ export const defaults: Required<ERC20Options> = {
     symbol: "MTK",
     premint: "0",
     premintAddress: "msg.sender",
-    capped: "∞",
   },
   features: {
     burnable: false,
@@ -69,7 +66,6 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
       premint: opts.metadata.premint ?? defaults.metadata.premint,
       premintAddress:
         opts.metadata.premintAddress ?? defaults.metadata.premintAddress,
-      capped: opts.metadata.capped ?? defaults.metadata.capped,
     },
     features: {
       burnable: opts.features.burnable ?? defaults.features.burnable,
@@ -105,40 +101,12 @@ export function buildERC20(opts: ERC20Options): Contract {
 
   addERC20Base(c, allOpts.metadata.name, allOpts.metadata.symbol);
 
-  if (
-    allOpts.metadata.capped &&
-    allOpts.metadata.capped != "∞" &&
-    allOpts.metadata.capped != "0"
-  ) {
-    features.push([ERC20TypeFeatureType.CAPPED]);
-    addERC20Cappable(c, allOpts.metadata.capped);
-  }
-
   if (allOpts.metadata.premint && allOpts.metadata.premint != "0") {
-    if (allOpts.metadata.capped != "∞" && allOpts.metadata.capped != "0") {
-      if (
-        parseInt(allOpts.metadata.premint) >
-        parseInt(allOpts.metadata.capped as string)
-      ) {
-        addERC20Premint(
-          c,
-          allOpts.metadata.capped as string,
-          allOpts.metadata.premintAddress as string
-        );
-      } else {
-        addERC20Premint(
-          c,
-          allOpts.metadata.premint,
-          allOpts.metadata.premintAddress as string
-        );
-      }
-    } else {
-      addERC20Premint(
-        c,
-        allOpts.metadata.premint,
-        allOpts.metadata.premintAddress as string
-      );
-    }
+    addERC20Premint(
+      c,
+      allOpts.metadata.premint,
+      allOpts.metadata.premintAddress as string
+    );
   }
 
   if (allOpts.features.burnable) {
