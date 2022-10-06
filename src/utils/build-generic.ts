@@ -1,9 +1,9 @@
 import { buildERC20, ERC20Options } from "../material/token/erc20/erc20";
-import { buildERC721, ERC721Options } from "../material/ethereum/erc721/erc721";
+import { buildERC721, ERC721Options } from "../material/token/erc721/erc721";
 import {
   buildERC1155,
   ERC1155Options,
-} from "../material/ethereum/erc1155/erc1155";
+} from "../material/token/erc1155/erc1155";
 
 export enum Kinds {
   ERC20 = "ERC20",
