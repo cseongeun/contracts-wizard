@@ -33,6 +33,20 @@ export interface ERC721Options extends CommonOptions {
   };
 }
 
+export const ERC721OptionDescription = {
+  metadata: {
+    name: "Name of token",
+    symbol: "Symbol of token",
+  },
+  features: {
+    burnable: "burnable description",
+    pausable: "pausable description",
+    autoIncrementId: "autoIncrementId description",
+    freezable: "freezable description",
+    batchTransferable: "batchTransferable description",
+  },
+};
+
 export const defaults: Required<ERC721Options> = {
   metadata: {
     name: "MyToken",

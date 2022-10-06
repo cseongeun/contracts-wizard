@@ -39,6 +39,23 @@ export interface ERC20Options extends CommonOptions {
   };
 }
 
+export const ERC20OptionDescription = {
+  metadata: {
+    name: "Name of token",
+    symbol: "Symbol of token",
+    premint: "Create an initial amount of tokens.",
+    premintAddress: "Receiver of   an initial amount of tokens.",
+  },
+  features: {
+    burnable: "burnable description",
+    freezable: "freezable description",
+    lockable: "lockable description",
+    pausable: "pausable description",
+    mintable: "mintable description",
+    batchTransferable: "batchTransferable description",
+  },
+};
+
 export const defaults: Required<ERC20Options> = {
   metadata: {
     name: "MyToken",

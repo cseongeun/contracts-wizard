@@ -33,6 +33,20 @@ export interface ERC1155Options extends CommonOptions {
   };
 }
 
+export const ERC1155OptionDescription = {
+  metadata: {
+    name: "Name of token",
+    symbol: "Symbol of token",
+    baseURI: "BaseURI of token",
+  },
+  features: {
+    burnable: "burnable description",
+    freezable: "freezable description",
+    pausable: "pausable description",
+    // uriStoragable?: boolean;
+  },
+};
+
 export const defaults: Required<ERC1155Options> = {
   metadata: {
     name: "MyToken",
