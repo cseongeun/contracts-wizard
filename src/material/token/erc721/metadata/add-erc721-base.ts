@@ -54,6 +54,21 @@ export function addERC721Base(
   }
 
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn);
+
+  const fn2 = getMintFunctionWithData(incremental);
+  requireAccessControl(c, fn2, access, "MINTER");
+
+  if (incremental) {
+    c.addUsing(COUNTER, "Counters.Counter");
+    c.addVariable("Counters.Counter private _tokenIdCounter;");
+    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn2);
+    c.addFunctionCode("_tokenIdCounter.increment();", fn2);
+    c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
+  } else {
+    c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
+  }
+
+  c.addFunctionCode("_setTokenURI(tokenId, uri);", fn2);
 }
 
 const functions = defineFunctions({
@@ -100,6 +115,23 @@ function getMintFunction(incremental: boolean) {
   }
 
   fn.args.push({ name: "uri", type: "string memory" });
+
+  return fn;
+}
+
+function getMintFunctionWithData(incremental: boolean) {
+  const fn = {
+    name: "safeMint",
+    kind: "public" as const,
+    args: [{ name: "to", type: "address" }],
+  };
+
+  if (!incremental) {
+    fn.args.push({ name: "tokenId", type: "uint256" });
+  }
+
+  fn.args.push({ name: "uri", type: "string memory" });
+  fn.args.push({ name: "data", type: "bytes memory" });
 
   return fn;
 }
