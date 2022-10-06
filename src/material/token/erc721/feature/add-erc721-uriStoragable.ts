@@ -1,15 +1,13 @@
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC721_URI_STORAGABLE } from "../../../path/erc721-path";
 
-export function addERC721URIStorage(c: ContractBuilder) {
-  c.addParent({
-    name: "ERC721URIStorage",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721URIStorage.sol`,
-  });
+export function addERC721URIStoragable(c: ContractBuilder) {
+  c.addParent(ERC721_URI_STORAGABLE);
 
-  c.addOverride("ERC721URIStorage", functions._burn);
-  c.addOverride("ERC721URIStorage", functions.tokenURI);
+  c.addOverride(ERC721_URI_STORAGABLE.name, functions._burn);
+  c.addOverride(ERC721_URI_STORAGABLE.name, functions.tokenURI);
 }
 
 const functions = defineFunctions({

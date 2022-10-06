@@ -2,15 +2,13 @@ import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC721_ENUMERABLE } from "../../../path/erc721-path";
 
 export function addERC721Enumerable(c: ContractBuilder) {
-  c.addParent({
-    name: "ERC721Enumerable",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721Enumerable.sol`,
-  });
+  c.addParent(ERC721_ENUMERABLE);
 
-  c.addOverride("ERC721Enumerable", functions._beforeTokenTransfer);
-  c.addOverride("ERC721Enumerable", supportsInterface);
+  c.addOverride(ERC721_ENUMERABLE.name, functions._beforeTokenTransfer);
+  c.addOverride(ERC721_ENUMERABLE.name, supportsInterface);
 }
 
 const functions = defineFunctions({

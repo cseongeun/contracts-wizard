@@ -2,25 +2,20 @@ import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC721_DEFAULT } from "../../../path/erc721-path";
 
 export function addERC721Base(
   c: ContractBuilder,
   name: string,
   symbol: string
 ) {
-  c.addParent(
-    {
-      name: "ERC721",
-      path: `${pathPrefix}/ethereum/erc721/ERC721.sol`,
-    },
-    [name, symbol]
-  );
+  c.addParent(ERC721_DEFAULT, [name, symbol]);
 
-  c.addOverride("ERC721", functions._beforeTokenTransfer);
-  c.addOverride("ERC721", functions._afterTokenTransfer);
-  c.addOverride("ERC721", functions._burn);
-  c.addOverride("ERC721", functions.tokenURI);
-  c.addOverride("ERC721", supportsInterface);
+  c.addOverride(ERC721_DEFAULT.name, functions._beforeTokenTransfer);
+  c.addOverride(ERC721_DEFAULT.name, functions._afterTokenTransfer);
+  c.addOverride(ERC721_DEFAULT.name, functions._burn);
+  c.addOverride(ERC721_DEFAULT.name, functions.tokenURI);
+  c.addOverride(ERC721_DEFAULT.name, supportsInterface);
 }
 
 const functions = defineFunctions({

@@ -10,13 +10,13 @@ import {
   defaults as erc721defaults,
   isAccessControlRequired as erc721IsAccessControlRequired,
   ERC721Options,
-} from "../material/ethereum/erc721/erc721";
+} from "../material/token/erc721/erc721";
 import {
   printERC1155,
   defaults as erc1155defaults,
   isAccessControlRequired as erc1155IsAccessControlRequired,
   ERC1155Options,
-} from "../material/ethereum/erc1155/erc1155";
+} from "../material/token/erc1155/erc1155";
 
 export interface WizardContractAPI<Options extends CommonOptions> {
   print: (opts?: Options) => string;

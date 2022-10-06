@@ -5,14 +5,12 @@ import {
 } from "../../../common/access/set-access-control";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC721_PAUSABLE } from "../../../path/erc721-path";
 
-export function addERC1155Pausable(c: ContractBuilder, access: Access) {
-  c.addParent({
-    name: "ERC1155Pausable",
-    path: `${pathPrefix}/ethereum/erc1155/features/ERC1155Pausable.sol`,
-  });
+export function addERC721Pausable(c: ContractBuilder, access: Access) {
+  c.addParent(ERC721_PAUSABLE);
 
-  c.addOverride("ERC1155Pausable", functions._beforeTokenTransfer);
+  c.addOverride(ERC721_PAUSABLE.name, functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.pause, access, "PAUSER");
   c.addFunctionCode("_pause();", functions.pause);
@@ -25,12 +23,9 @@ const functions = defineFunctions({
   _beforeTokenTransfer: {
     kind: "internal" as const,
     args: [
-      { name: "operator", type: "address" },
       { name: "from", type: "address" },
       { name: "to", type: "address" },
-      { name: "ids", type: "uint256[] memory" },
-      { name: "amounts", type: "uint256[] memory" },
-      { name: "data", type: "bytes memory" },
+      { name: "tokenId", type: "uint256" },
     ],
   },
   pause: {

@@ -5,29 +5,30 @@ import {
   requireAccessControl,
 } from "../../../common/access/set-access-control";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC1155_FREEZABLE } from "../../../path/erc1155-path";
 
-export function addERC721Freezable(c: ContractBuilder, access: Access) {
-  c.addParent({
-    name: "ERC721Freezable",
-    path: `${pathPrefix}/ethereum/erc721/features/ERC721Freezable.sol`,
-  });
+export function addERC1155Freezable(c: ContractBuilder, access: Access) {
+  c.addParent(ERC1155_FREEZABLE);
 
-  c.addOverride("ERC721Freezable", functions._beforeTokenTransfer);
+  c.addOverride(ERC1155_FREEZABLE.name, functions._beforeTokenTransfer);
 
   requireAccessControl(c, functions.freeze, access, "FREEZER");
-  c.addFunctionCode("_freeze();", functions.freeze);
+  c.addFunctionCode("_freeze(account);", functions.freeze);
 
   requireAccessControl(c, functions.unfreeze, access, "FREEZER");
-  c.addFunctionCode("_unfreeze();", functions.unfreeze);
+  c.addFunctionCode("_unfreeze(account);", functions.unfreeze);
 }
 
 const functions = defineFunctions({
   _beforeTokenTransfer: {
     kind: "internal" as const,
     args: [
+      { name: "operator", type: "address" },
       { name: "from", type: "address" },
       { name: "to", type: "address" },
-      { name: "tokenId", type: "uint256" },
+      { name: "ids", type: "uint256[] memory" },
+      { name: "amounts", type: "uint256[] memory" },
+      { name: "data", type: "bytes memory" },
     ],
   },
   freeze: {

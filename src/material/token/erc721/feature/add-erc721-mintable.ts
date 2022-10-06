@@ -3,7 +3,7 @@ import {
   Access,
   requireAccessControl,
 } from "../../../common/access/set-access-control";
-import { pathPrefix } from "../../../../utils/sourcecode";
+import { COUNTER } from "../../../path/util-path";
 
 export function addERC721Mintable(
   c: ContractBuilder,
@@ -15,13 +15,7 @@ export function addERC721Mintable(
   requireAccessControl(c, fn, access, "MINTER");
 
   if (incremental) {
-    c.addUsing(
-      {
-        name: "Counters",
-        path: `${pathPrefix}/common/utils/Counters.sol`,
-      },
-      "Counters.Counter"
-    );
+    c.addUsing(COUNTER, "Counters.Counter");
     c.addVariable("Counters.Counter private _tokenIdCounter;");
     c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn);
     c.addFunctionCode("_tokenIdCounter.increment();", fn);

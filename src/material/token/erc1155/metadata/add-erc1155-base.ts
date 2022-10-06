@@ -2,18 +2,13 @@ import { supportsInterface } from "../../../../utils/common-functions";
 import type { ContractBuilder } from "../../../../utils/contract";
 import { defineFunctions } from "../../../../utils/define-functions";
 import { pathPrefix } from "../../../../utils/sourcecode";
+import { ERC1155_DEFAULT } from "../../../path/erc1155-path";
 
 export function addERC1155Base(c: ContractBuilder, uri: string) {
-  c.addParent(
-    {
-      name: "ERC1155",
-      path: `${pathPrefix}/ethereum/erc1155/ERC1155.sol`,
-    },
-    [uri]
-  );
+  c.addParent(ERC1155_DEFAULT, [uri]);
 
-  c.addOverride("ERC1155", functions._beforeTokenTransfer);
-  c.addOverride("ERC1155", supportsInterface);
+  c.addOverride(ERC1155_DEFAULT.name, functions._beforeTokenTransfer);
+  c.addOverride(ERC1155_DEFAULT.name, supportsInterface);
 }
 
 const functions = defineFunctions({
