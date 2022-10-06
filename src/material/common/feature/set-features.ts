@@ -36,6 +36,7 @@ export function setFeatures(c: ContractBuilder, features: any[]) {
       c.addConstructorCode(`_features[${index}] = FeatureType.${feature};`);
     });
 
+    c.addConstructorCode("");
     c.addConstructorCode(`_setFeatures(_features);`);
   }
 }
