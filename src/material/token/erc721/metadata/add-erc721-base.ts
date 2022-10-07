@@ -40,9 +40,9 @@ export function addERC721Base(
   c.addOverride(ERC721_ENUMERABLE.name, supportsInterface);
 
   // Mintable
-  const fn = getMintFunction(incremental);
+  // SafeMint
+  const fn = getSafeMintFunction(incremental);
   requireAccessControl(c, fn, access, "MINTER");
-
   if (incremental) {
     c.addUsing(COUNTER, "Counters.Counter");
     c.addVariable("Counters.Counter private _tokenIdCounter;");
@@ -52,12 +52,11 @@ export function addERC721Base(
   } else {
     c.addFunctionCode("_safeMint(to, tokenId);", fn);
   }
-
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn);
 
-  const fn2 = getMintFunctionWithData(incremental);
+  // SafeMint
+  const fn2 = getSafeMintFunctionWithData(incremental);
   requireAccessControl(c, fn2, access, "MINTER");
-
   if (incremental) {
     c.addUsing(COUNTER, "Counters.Counter");
     c.addVariable("Counters.Counter private _tokenIdCounter;");
@@ -67,8 +66,22 @@ export function addERC721Base(
   } else {
     c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
   }
-
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn2);
+
+  // Mint
+  const fn3 = getMintFunction(incremental);
+  requireAccessControl(c, fn3, access, "MINTER");
+  if (incremental) {
+    c.addUsing(COUNTER, "Counters.Counter");
+    c.addVariable("Counters.Counter private _tokenIdCounter;");
+    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn3);
+    c.addFunctionCode("_tokenIdCounter.increment();", fn3);
+    c.addFunctionCode("_safeMint(to, tokenId);", fn3);
+  } else {
+    c.addFunctionCode("_safeMint(to, tokenId);", fn3);
+  }
+
+  c.addFunctionCode("_setTokenURI(tokenId, uri);", fn3);
 }
 
 const functions = defineFunctions({
@@ -103,7 +116,7 @@ const functions = defineFunctions({
   },
 });
 
-function getMintFunction(incremental: boolean) {
+function getSafeMintFunction(incremental: boolean) {
   const fn = {
     name: "safeMint",
     kind: "public" as const,
@@ -119,7 +132,7 @@ function getMintFunction(incremental: boolean) {
   return fn;
 }
 
-function getMintFunctionWithData(incremental: boolean) {
+function getSafeMintFunctionWithData(incremental: boolean) {
   const fn = {
     name: "safeMint",
     kind: "public" as const,
@@ -132,6 +145,22 @@ function getMintFunctionWithData(incremental: boolean) {
 
   fn.args.push({ name: "uri", type: "string memory" });
   fn.args.push({ name: "data", type: "bytes memory" });
+
+  return fn;
+}
+
+function getMintFunction(incremental: boolean) {
+  const fn = {
+    name: "mint",
+    kind: "public" as const,
+    args: [{ name: "to", type: "address" }],
+  };
+
+  if (!incremental) {
+    fn.args.push({ name: "tokenId", type: "uint256" });
+  }
+
+  fn.args.push({ name: "uri", type: "string memory" });
 
   return fn;
 }
