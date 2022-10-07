@@ -76,9 +76,9 @@ export function addERC721Base(
     c.addVariable("Counters.Counter private _tokenIdCounter;");
     c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn3);
     c.addFunctionCode("_tokenIdCounter.increment();", fn3);
-    c.addFunctionCode("_safeMint(to, tokenId);", fn3);
+    c.addFunctionCode("_mint(to, tokenId);", fn3);
   } else {
-    c.addFunctionCode("_safeMint(to, tokenId);", fn3);
+    c.addFunctionCode("_mint(to, tokenId);", fn3);
   }
 
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn3);
