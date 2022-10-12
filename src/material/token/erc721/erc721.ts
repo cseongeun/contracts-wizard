@@ -11,7 +11,6 @@ import { addERC721Burnable } from "./feature/add-erc721-burnable";
 import { addERC721Pausable } from "./feature/add-erc721-pausable";
 import { addERC721Base } from "./metadata/add-erc721-base";
 import { addERC721Freezable } from "./feature/add-erc721-freezable";
-import { addERC721BatchTransferable } from "./feature/add-erc721-batchTransferable";
 import {
   Access,
   ERC721TypeFeatureType,
@@ -29,7 +28,6 @@ export interface ERC721Options extends CommonOptions {
     pausable?: boolean;
     autoIncrementId?: boolean;
     freezable?: boolean;
-    batchTransferable?: boolean;
   };
 }
 
@@ -43,7 +41,6 @@ export const ERC721OptionDescription = {
     pausable: "pausable description",
     autoIncrementId: "autoIncrementId description",
     freezable: "freezable description",
-    batchTransferable: "batchTransferable description",
   },
 };
 
@@ -57,7 +54,6 @@ export const defaults: Required<ERC721Options> = {
     pausable: false,
     autoIncrementId: false,
     freezable: false,
-    batchTransferable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -75,8 +71,6 @@ function withDefaults(opts: ERC721Options): Required<ERC721Options> {
       autoIncrementId:
         opts.features.autoIncrementId ?? defaults.features.autoIncrementId,
       freezable: opts.features.freezable ?? defaults.features.freezable,
-      batchTransferable:
-        opts.features.batchTransferable ?? defaults.features.batchTransferable,
     },
     ...withCommonDefaults(opts),
   };
@@ -119,11 +113,6 @@ export function buildERC721(opts: ERC721Options): Contract {
   if (allOpts.features.burnable) {
     features.push([ERC721TypeFeatureType.BURNABLE]);
     addERC721Burnable(c);
-  }
-
-  if (allOpts.features.batchTransferable) {
-    features.push([ERC721TypeFeatureType.BATCH_TRRANSFERABLE]);
-    addERC721BatchTransferable(c);
   }
 
   setAccessControl(c, access);
