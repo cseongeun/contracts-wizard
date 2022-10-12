@@ -13,7 +13,6 @@ import { addERC20Pausable } from "./feature/add-erc20-pausable";
 import { addERC20Base } from "./metadata/add-erc20-base";
 import { addERC20Lockable } from "./feature/add-erc20-lockable";
 import { addERC20Freezable } from "./feature/add-erc20-freezable";
-import { addERC20BatchTransferable } from "./feature/add-erc20-batchTransferable";
 import {
   Access,
   ERC20TypeFeatureType,
@@ -35,7 +34,6 @@ export interface ERC20Options extends CommonOptions {
     lockable?: boolean;
     pausable?: boolean;
     mintable?: boolean;
-    batchTransferable: boolean;
   };
 }
 
@@ -52,7 +50,6 @@ export const ERC20OptionDescription = {
     lockable: "lockable description",
     pausable: "pausable description",
     mintable: "mintable description",
-    batchTransferable: "batchTransferable description",
   },
 };
 
@@ -69,7 +66,6 @@ export const defaults: Required<ERC20Options> = {
     lockable: false,
     pausable: false,
     mintable: false,
-    batchTransferable: false,
   },
   access: commonDefaults.access,
   info: commonDefaults.info,
@@ -90,8 +86,6 @@ function withDefaults(opts: ERC20Options): Required<ERC20Options> {
       lockable: opts.features.lockable ?? defaults.features.lockable,
       pausable: opts.features.pausable ?? defaults.features.pausable,
       mintable: opts.features.mintable ?? defaults.features.mintable,
-      batchTransferable:
-        opts.features.batchTransferable ?? defaults.features.batchTransferable,
     },
     ...withCommonDefaults(opts),
   };
@@ -149,11 +143,6 @@ export function buildERC20(opts: ERC20Options): Contract {
   if (allOpts.features.lockable) {
     features.push([ERC20TypeFeatureType.LOCKABLE]);
     addERC20Lockable(c, access);
-  }
-
-  if (allOpts.features.batchTransferable) {
-    features.push([ERC20TypeFeatureType.BATCH_TRANSFERABLE]);
-    addERC20BatchTransferable(c);
   }
 
   setAccessControl(c, access);
