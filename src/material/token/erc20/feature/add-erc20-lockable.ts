@@ -34,10 +34,10 @@ export function addERC20Lockable(c: ContractBuilder, access: Access) {
     functions.batchTransferWithLock
   );
 
-  requireAccessControl(c, functions.extendLock, access, "LOCKER");
+  requireAccessControl(c, functions.changeLockRelease, access, "LOCKER");
   c.addFunctionCode(
-    "_extendLock(account, reason, time);",
-    functions.extendLock
+    "_changeLockRelease(account, reason, newRelease);",
+    functions.changeLockRelease
   );
 
   requireAccessControl(c, functions.increaseLockAmount, access, "LOCKER");
@@ -101,12 +101,12 @@ const functions = defineFunctions({
       { name: "releases", type: "uint256[] calldata" },
     ],
   },
-  extendLock: {
+  changeLockRelease: {
     kind: "public" as const,
     args: [
       { name: "account", type: "address" },
       { name: "reason", type: "bytes32" },
-      { name: "time", type: "uint256" },
+      { name: "newRelease", type: "uint256" },
     ],
   },
   increaseLockAmount: {
