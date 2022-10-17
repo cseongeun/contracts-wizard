@@ -40,29 +40,46 @@ export function addERC721Base(
   c.addOverride(ERC721_ENUMERABLE.name, supportsInterface);
 
   // Mintable
-  // SafeMint
   if (incremental) {
     c.addUsing(COUNTER, "Counters.Counter");
     c.addVariable("Counters.Counter private _tokenIdCounter;");
-    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn);
-    c.addFunctionCode("_tokenIdCounter.increment();", fn);
   }
 
+  // SafeMint
   const fn = getSafeMintFunction(incremental);
   requireAccessControl(c, fn, access, "MINTER");
-  c.addFunctionCode("_safeMint(to, tokenId);", fn);
+  if (incremental) {
+    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn);
+    c.addFunctionCode("_tokenIdCounter.increment();", fn);
+    c.addFunctionCode("_safeMint(to, tokenId);", fn);
+  } else {
+    c.addFunctionCode("_safeMint(to, tokenId);", fn);
+  }
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn);
 
   // SafeMint
   const fn2 = getSafeMintFunctionWithData(incremental);
   requireAccessControl(c, fn2, access, "MINTER");
-  c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
+  if (incremental) {
+    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn2);
+    c.addFunctionCode("_tokenIdCounter.increment();", fn2);
+    c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
+  } else {
+    c.addFunctionCode("_safeMint(to, tokenId, data);", fn2);
+  }
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn2);
 
   // Mint
   const fn3 = getMintFunction(incremental);
   requireAccessControl(c, fn3, access, "MINTER");
-  c.addFunctionCode("_mint(to, tokenId);", fn3);
+  if (incremental) {
+    c.addFunctionCode("uint256 tokenId = _tokenIdCounter.current();", fn3);
+    c.addFunctionCode("_tokenIdCounter.increment();", fn3);
+    c.addFunctionCode("_mint(to, tokenId);", fn3);
+  } else {
+    c.addFunctionCode("_mint(to, tokenId);", fn3);
+  }
+
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn3);
 }
 
