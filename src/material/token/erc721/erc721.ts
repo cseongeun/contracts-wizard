@@ -100,6 +100,10 @@ export function buildERC721(opts: ERC721Options): Contract {
     access
   );
 
+  if (allOpts.features.autoIncrementId) {
+    features.push([ERC721TypeFeatureType.AUTO_INCREMENT_ID]);
+  }
+
   if (allOpts.features.freezable) {
     features.push([ERC721TypeFeatureType.FREEZABLE]);
     addERC721Freezable(c, access);
