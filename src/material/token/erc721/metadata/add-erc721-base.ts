@@ -81,6 +81,48 @@ export function addERC721Base(
   }
 
   c.addFunctionCode("_setTokenURI(tokenId, uri);", fn3);
+
+  const fn4 = getBatchSafeMintFunction(incremental);
+  requireAccessControl(c, fn4, access, "MINTER");
+  if (incremental) {
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn4);
+    c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn4);
+    c.addFunctionCode("  _tokenIdCounter.increment();", fn4);
+    c.addFunctionCode("  _safeMint(to[i], tokenId);", fn4);
+  } else {
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn4);
+    c.addFunctionCode("  _safeMint(to[i], tokenIds[i]);", fn4);
+  }
+  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn4);
+  c.addFunctionCode("}", fn4);
+
+  const fn5 = getBatchSafeMintFunctionWithData(incremental);
+  requireAccessControl(c, fn5, access, "MINTER");
+  if (incremental) {
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn5);
+    c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn5);
+    c.addFunctionCode("  _tokenIdCounter.increment();", fn5);
+    c.addFunctionCode("  _safeMint(to[i], tokenId, datas[i]);", fn5);
+  } else {
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn5);
+    c.addFunctionCode("  _safeMint(to[i], tokenIds[i], datas[i]);", fn5);
+  }
+  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn5);
+  c.addFunctionCode("}", fn5);
+
+  const fn6 = getBatchMintFunction(incremental);
+  requireAccessControl(c, fn6, access, "MINTER");
+  if (incremental) {
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn6);
+    c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn6);
+    c.addFunctionCode("  _tokenIdCounter.increment();", fn6);
+    c.addFunctionCode("  _mint(to[i], tokenId);", fn6);
+  } else {
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn6);
+    c.addFunctionCode("  _mint(to[i], tokenIds[i]);", fn6);
+  }
+  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn6);
+  c.addFunctionCode("}", fn6);
 }
 
 const functions = defineFunctions({
@@ -160,6 +202,55 @@ function getMintFunction(incremental: boolean) {
   }
 
   fn.args.push({ name: "uri", type: "string memory" });
+
+  return fn;
+}
+
+function getBatchSafeMintFunction(incremental: boolean) {
+  const fn = {
+    name: "batchSafeMint",
+    kind: "public" as const,
+    args: [{ name: "to", type: "address memory[]" }],
+  };
+
+  if (!incremental) {
+    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+  }
+
+  fn.args.push({ name: "uris", type: "string memory[]" });
+
+  return fn;
+}
+
+function getBatchSafeMintFunctionWithData(incremental: boolean) {
+  const fn = {
+    name: "batchSafeMint",
+    kind: "public" as const,
+    args: [{ name: "to", type: "address memory[]" }],
+  };
+
+  if (!incremental) {
+    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+  }
+
+  fn.args.push({ name: "uris", type: "string memory[]" });
+  fn.args.push({ name: "datas", type: "bytes memory[]" });
+
+  return fn;
+}
+
+function getBatchMintFunction(incremental: boolean) {
+  const fn = {
+    name: "batchMint",
+    kind: "public" as const,
+    args: [{ name: "to", type: "address memory[]" }],
+  };
+
+  if (!incremental) {
+    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+  }
+
+  fn.args.push({ name: "uris", type: "string memory[]" });
 
   return fn;
 }
