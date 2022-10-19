@@ -210,14 +210,14 @@ function getBatchSafeMintFunction(incremental: boolean) {
   const fn = {
     name: "batchSafeMint",
     kind: "public" as const,
-    args: [{ name: "to", type: "address memory[]" }],
+    args: [{ name: "to", type: "address[] memory" }],
   };
 
   if (!incremental) {
-    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+    fn.args.push({ name: "tokenIds", type: "uint256[] memory" });
   }
 
-  fn.args.push({ name: "uris", type: "string memory[]" });
+  fn.args.push({ name: "uris", type: "string[] memory" });
 
   return fn;
 }
@@ -226,15 +226,15 @@ function getBatchSafeMintFunctionWithData(incremental: boolean) {
   const fn = {
     name: "batchSafeMint",
     kind: "public" as const,
-    args: [{ name: "to", type: "address memory[]" }],
+    args: [{ name: "to", type: "address[] memory" }],
   };
 
   if (!incremental) {
-    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+    fn.args.push({ name: "tokenIds", type: "uint256[] memory" });
   }
 
-  fn.args.push({ name: "uris", type: "string memory[]" });
-  fn.args.push({ name: "datas", type: "bytes memory[]" });
+  fn.args.push({ name: "uris", type: "string[] memory" });
+  fn.args.push({ name: "datas", type: "bytes[] memory" });
 
   return fn;
 }
@@ -243,14 +243,14 @@ function getBatchMintFunction(incremental: boolean) {
   const fn = {
     name: "batchMint",
     kind: "public" as const,
-    args: [{ name: "to", type: "address memory[]" }],
+    args: [{ name: "to", type: "address[] memory" }],
   };
 
   if (!incremental) {
-    fn.args.push({ name: "tokenIds", type: "uint256 memory[]" });
+    fn.args.push({ name: "tokenIds", type: "uint256[] memory" });
   }
 
-  fn.args.push({ name: "uris", type: "string memory[]" });
+  fn.args.push({ name: "uris", type: "string[] memory" });
 
   return fn;
 }
