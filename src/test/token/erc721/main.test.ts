@@ -8,7 +8,7 @@ describe("ERC721", () => {
     const opts = token.defaults;
 
     opts.access = false;
-    opts.features.autoIncrementId = true;
+    opts.features.autoIncrementId = false;
     // opts.features.burnable = true;
     // opts.features.pausable = true;
     // opts.features.freezable = true;

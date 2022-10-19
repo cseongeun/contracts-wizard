@@ -91,9 +91,10 @@ export function addERC721Base(
     c.addFunctionCode("  _safeMint(to[i], tokenId);", fn4);
   } else {
     c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn4);
-    c.addFunctionCode("  _safeMint(to[i], tokenIds[i]);", fn4);
+    c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn4);
+    c.addFunctionCode("  _safeMint(to[i], tokenId);", fn4);
   }
-  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn4);
+  c.addFunctionCode("  _setTokenURI(tokenId, uris[i]);", fn4);
   c.addFunctionCode("}", fn4);
 
   const fn5 = getBatchSafeMintFunctionWithData(incremental);
@@ -105,9 +106,10 @@ export function addERC721Base(
     c.addFunctionCode("  _safeMint(to[i], tokenId, datas[i]);", fn5);
   } else {
     c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn5);
-    c.addFunctionCode("  _safeMint(to[i], tokenIds[i], datas[i]);", fn5);
+    c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn5);
+    c.addFunctionCode("  _safeMint(to[i], tokenId, datas[i]);", fn5);
   }
-  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn5);
+  c.addFunctionCode("  _setTokenURI(tokenId, uris[i]);", fn5);
   c.addFunctionCode("}", fn5);
 
   const fn6 = getBatchMintFunction(incremental);
@@ -119,9 +121,10 @@ export function addERC721Base(
     c.addFunctionCode("  _mint(to[i], tokenId);", fn6);
   } else {
     c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn6);
-    c.addFunctionCode("  _mint(to[i], tokenIds[i]);", fn6);
+    c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn6);
+    c.addFunctionCode("  _mint(to[i], tokenId);", fn6);
   }
-  c.addFunctionCode("  _setTokenURI(tokenIds[i], uris[i]);", fn6);
+  c.addFunctionCode("  _setTokenURI(tokenId, uris[i]);", fn6);
   c.addFunctionCode("}", fn6);
 }
 
