@@ -43,7 +43,6 @@ export const ERC1155OptionDescription = {
     burnable: "burnable description",
     freezable: "freezable description",
     pausable: "pausable description",
-    // uriStoragable?: boolean;
   },
 };
 
@@ -129,7 +128,7 @@ export function buildERC1155(opts: ERC1155Options): Contract {
   setAccessControl(c, access);
   setInformation(c, info);
 
-  setFeatures(c, features);
+  // setFeatures(c, features);
   setAccess(
     c,
     !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES

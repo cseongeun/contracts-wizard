@@ -122,7 +122,7 @@ export function buildERC721(opts: ERC721Options): Contract {
   setAccessControl(c, access);
   setInformation(c, info);
 
-  setFeatures(c, features);
+  // setFeatures(c, features);
   setAccess(
     c,
     !access ? Access.NONE : access == "ownable" ? Access.OWNABLE : Access.ROLES

@@ -85,12 +85,12 @@ export function addERC721Base(
   const fn4 = getBatchSafeMintFunction(incremental);
   requireAccessControl(c, fn4, access, "MINTER");
   if (incremental) {
-    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn4);
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length; i++) {", fn4);
     c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn4);
     c.addFunctionCode("  _tokenIdCounter.increment();", fn4);
     c.addFunctionCode("  _safeMint(to[i], tokenId);", fn4);
   } else {
-    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn4);
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length; i++) {", fn4);
     c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn4);
     c.addFunctionCode("  _safeMint(to[i], tokenId);", fn4);
   }
@@ -100,12 +100,12 @@ export function addERC721Base(
   const fn5 = getBatchSafeMintFunctionWithData(incremental);
   requireAccessControl(c, fn5, access, "MINTER");
   if (incremental) {
-    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn5);
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length; i++) {", fn5);
     c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn5);
     c.addFunctionCode("  _tokenIdCounter.increment();", fn5);
     c.addFunctionCode("  _safeMint(to[i], tokenId, datas[i]);", fn5);
   } else {
-    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn5);
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length; i++) {", fn5);
     c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn5);
     c.addFunctionCode("  _safeMint(to[i], tokenId, datas[i]);", fn5);
   }
@@ -115,12 +115,12 @@ export function addERC721Base(
   const fn6 = getBatchMintFunction(incremental);
   requireAccessControl(c, fn6, access, "MINTER");
   if (incremental) {
-    c.addFunctionCode("for (uint256 i = 0; i < uris.length;) {", fn6);
+    c.addFunctionCode("for (uint256 i = 0; i < uris.length; i++) {", fn6);
     c.addFunctionCode("  uint256 tokenId = _tokenIdCounter.current();", fn6);
     c.addFunctionCode("  _tokenIdCounter.increment();", fn6);
     c.addFunctionCode("  _mint(to[i], tokenId);", fn6);
   } else {
-    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length;) {", fn6);
+    c.addFunctionCode("for (uint256 i = 0; i < tokenIds.length; i++) {", fn6);
     c.addFunctionCode("  uint256 tokenId = tokenIds[i];", fn6);
     c.addFunctionCode("  _mint(to[i], tokenId);", fn6);
   }
